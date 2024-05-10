@@ -1,24 +1,36 @@
-# README
+# エナジードリンク情報共有システム「ミナギルドリンク」
+​
+## サイト概要
+### サイトテーマ
+「エナジードリンク」のみに対象を絞った主観的情報が飛び交うレビューサイト
+​
+### テーマを選んだ理由
+対象とした「エナジードリンク」は、近年需要を高め様々なメーカーが商品を発売しています。
+しかし、どれもこれも味が複雑であり、味の説明も横文字のものが多く一目では伝わり辛い現状です。
+容量も大きいものが多く、一度買って味を確かめるのにもハードルが高い…
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+そこで、その「エナジードリンク」の味を知っている人の「感じた意見」を集め、
+その意見を「客観的に」確認し購入をすれば、自身が「共感する」味にたどり着き、
+自身の好みに合った味のドリンクを見つけられるのではないかと考えました。
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### ターゲットユーザ
+エナジードリンクを飲用する若者世代を中心にターゲットとする。
+!!
+​
+### 主な利用シーン
+コンビニのドリンク棚で吟味している時、自分に合ったエナジードリンクを探している時
+!!
+​
+## 設計書
+<!--テーマを設定・提出する時点では不要です-->
+​
+## 開発環境
+- OS：Linux(CentOS)
+- 言語：HTML,CSS,JavaScript,Ruby,SQL
+- フレームワーク：Ruby on Rails
+- JSライブラリ：jQuery
+- IDE：Cloud9
+​
+## 使用素材
+- ドリンクに使用する画像は自身で用意し、缶に貼り付けられるデザインも自身で考案デザインを行います。
+- 全7種類、内1種類はエナジードリンクでないイレギュラー、内2種類は同ブランド、味のバリエーションとして作成します。

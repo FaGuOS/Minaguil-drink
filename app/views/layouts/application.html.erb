@@ -3,14 +3,24 @@
   <head>
     <title>MinaguilDrink</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://kit.fontawesome.com/8fdc7d4198.js" crossorigin="anonymous"></script>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'custom', media: 'all', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="wrapper">
+      <%= render 'layouts/header' %>
+      
+      <div class="content">
+        <%= yield %>
+      </div>
+    
+      <%= render 'layouts/footer' %>
+    </div>
   </body>
 </html>

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  review: MyText
+  'yes': 1
+  nonsence: 1
+
+two:
+  title: MyString
+  review: MyText
+  'yes': 1
+  nonsence: 1

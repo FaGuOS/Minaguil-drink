@@ -1,0 +1,41 @@
+.navbar .separator {
+  display: inline-block;
+  width: 10px;
+}
+
+.navbar .navbar-brand img {
+  width: 70% !important;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .navbar-brand img {
+    width: 70%; /* 画像の幅を15%に縮小 */
+    height: auto; /* 画像の縦横比を維持 */
+  }
+}
+
+.image-with-margin {
+  margin: 20px; /* 画像の外側に20pxの余白を追加 */
+}
+
+html, body {
+  height: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+}
+
+footer {
+  background-color: #343a40;
+  color: white;
+  text-align: right;
+  padding: 10px 0;
+}

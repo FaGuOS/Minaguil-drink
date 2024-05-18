@@ -1,0 +1,14 @@
+<div class="container-fluid d-flex flex-column justify-content-start align-items-center">
+  <div class="text-center mt-3">
+    <%= image_tag 'Title2.png', alt: 'Title', class: 'img-fluid image-with-margin', style: 'width: 80%; height: auto;'  %>
+    <h3 class="mt-3">
+      エナジードリンク情報共有システム「ミナギルドリンク」へようこそ。<br>
+      ここは、エナジードリンクを飲用するユーザーが<br>
+      自身で感じた味覚や嗜好などを投稿・閲覧するサイトです。
+    </h3>
+    <div class="mt-3">
+      <%= link_to 'DIVE!', home_path, class: 'btn btn-primary btn-lg' %>
+      <%= link_to 'Log in!', new_user_session_path, class: 'btn btn-secondary btn-lg' %>
+    </div>
+  </div>
+</div>

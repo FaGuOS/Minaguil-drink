@@ -1,4 +1,3 @@
-<!-- app/views/layouts/_header.html.erb -->
 <header class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <%= link_to root_path, class: 'navbar-brand' do %>
@@ -45,16 +44,30 @@
           <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "form-control" %>
         </div>
         <div class="dropdown me-3">
-          <button class="btn btn-outline-light dropdown-toggle" type="button" id="searchTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">一致タイプ</button>
-          <ul class="dropdown-menu" aria-labelledby="searchTypeDropdown">
-            <li><%= radio_button_tag :search_type, 'exact_match', params[:search_type] == 'exact_match', id: 'search_type_exact' %> <%= label_tag 'search_type_exact', '完全一致' %></li>
-            <li><%= radio_button_tag :search_type, 'forward_match', params[:search_type] == 'forward_match', id: 'search_type_forward' %> <%= label_tag 'search_type_forward', '前方一致' %></li>
-            <li><%= radio_button_tag :search_type, 'backward_match', params[:search_type] == 'backward_match', id: 'search_type_backward' %> <%= label_tag 'search_type_backward', '後方一致' %></li>
-            <li><%= radio_button_tag :search_type, 'partial_match', params[:search_type] == 'partial_match', id: 'search_type_partial' %> <%= label_tag 'search_type_partial', '部分一致' %></li>
+          <button class="btn btn-outline-light dropdown-toggle" type="button" id="searchTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+            一致タイプ
+          </button>
+          <ul class="dropdown-menu p-3" aria-labelledby="searchTypeDropdown">
+            <li class="form-check">
+              <%= radio_button_tag :search_type, 'exact_match', params[:search_type] == 'exact_match', id: 'search_type_exact', class: "form-check-input" %>
+              <%= label_tag 'search_type_exact', '完全一致', class: "form-check-label" %>
+            </li>
+            <li class="form-check">
+              <%= radio_button_tag :search_type, 'forward_match', params[:search_type] == 'forward_match', id: 'search_type_forward', class: "form-check-input" %>
+              <%= label_tag 'search_type_forward', '前方一致', class: "form-check-label" %>
+            </li>
+            <li class="form-check">
+              <%= radio_button_tag :search_type, 'backward_match', params[:search_type] == 'backward_match', id: 'search_type_backward', class: "form-check-input" %>
+              <%= label_tag 'search_type_backward', '後方一致', class: "form-check-label" %>
+            </li>
+            <li class="form-check">
+              <%= radio_button_tag :search_type, 'partial_match', params[:search_type] == 'partial_match', id: 'search_type_partial', class: "form-check-input" %>
+              <%= label_tag 'search_type_partial', '部分一致', class: "form-check-label" %>
+            </li>
           </ul>
         </div>
         <div class="form-check form-check-inline me-3">
-          <%= radio_button_tag :search_category, 'user', params[:search_category] == 'user', id: 'search_category_user', class: "form-check-input" %>
+          <%= radio_button_tag :search_category, 'user', params[:search_category] != 'post', id: 'search_category_user', class: "form-check-input" %>
           <%= label_tag 'search_category_user', raw('<i class="fa-solid fa-user" style="color: #8eb4f5;"></i>'), class: "form-check-label" %>
         </div>
         <div class="form-check form-check-inline me-3">

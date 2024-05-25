@@ -1,2 +1,33 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<!-- app/views/users/profile.html.erb -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <% content_for :page_title do %>
+      Profile!
+      <% end %>
+      <p><strong>アカウント名:</strong> <%= @user.user_name %></p>
+      <p><strong>パーソナルID:</strong> <%= @user.personal_id %></p>
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>累計投稿数:</strong> <%= @user.posts.count %></p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>累計Yes数:</strong> <%= number_to_human(@total_yes, units: { thousand: 'k', million: 'm', billion: 'b', trillion: 't' }) %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <h2>最近の投稿</h2>
+      <% @posts.each do |post| %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title"><%= post.title %></h5>
+            <p class="card-text"><%= truncate(post.review, length: 100) %></p>
+            <p class="card-text"><small class="text-muted">投稿日時: <%= post.created_at.strftime("%Y-%m-%d %H:%M:%S") %></small></p>
+            <p class="card-text"><small class="text-muted">Yes数: <%= post.yes %></small></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

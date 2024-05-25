@@ -68,6 +68,8 @@ group :production do
   gem 'mysql2'
 end
 
+gem 'bootstrap', '~> 5.0.2'
+
 gem "net-smtp"
 gem "net-pop"
 gem "net-imap"

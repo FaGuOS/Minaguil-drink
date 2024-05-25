@@ -1,0 +1,30 @@
+<div class="container mt-4">
+  <h1>Search Results</h1>
+
+  <% if @posts.any? %>
+    <h2>Posts</h2>
+    <div class="list-group mb-4">
+      <% @posts.each do |post| %>
+        <a href="<%= post_path(post) %>" class="list-group-item list-group-item-action">
+          <h5><%= post.title %></h5>
+          <p><%= truncate(post.review, length: 100) %></p>
+        </a>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @users.any? %>
+    <h2>Users</h2>
+    <div class="list-group">
+      <% @users.each do |user| %>
+        <a href="<%= user_path(user) %>" class="list-group-item list-group-item-action">
+          <h5><%= user.user_name.presence || 'n/a' %></h5>
+        </a>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @users.none? && @posts.none? %>
+    <p>No results found</p>
+  <% end %>
+</div>

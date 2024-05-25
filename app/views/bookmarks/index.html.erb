@@ -1,0 +1,21 @@
+<% content_for :page_title do %>
+  Bookmarks!
+<% end %>
+
+<div class="container mt-4">
+  <h2>Bookmarked Posts</h2>
+
+  <% if @bookmarked_posts.any? %>
+    <div class="list-group">
+      <% @bookmarked_posts.each do |post| %>
+        <a href="<%= post_path(post) %>" class="list-group-item list-group-item-action">
+          <h5 class="mb-1"><%= post.title %></h5>
+          <p class="mb-1"><%= truncate(post.review, length: 100) %></p>
+          <small>Bookmarked at <%= l(post.created_at, format: :short) %></small>
+        </a>
+      <% end %>
+    </div>
+  <% else %>
+    <p>You have not bookmarked any posts yet.</p>
+  <% end %>
+</div>

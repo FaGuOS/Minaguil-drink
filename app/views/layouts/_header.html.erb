@@ -1,28 +1,68 @@
+<!-- app/views/layouts/_header.html.erb -->
 <header class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <%= link_to image_tag('logo2.png'), root_path, class: 'navbar-brand' %>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <%= link_to root_path, class: 'navbar-brand' do %>
+      <picture>
+        <source media="(max-width: 418px)" srcset="<%= asset_path('logo_small.png') %>">
+        <source media="(min-width: 419px)" srcset="<%= asset_path('logo2.png') %>">
+        <img src="<%= asset_path('logo2.png') %>" alt="Logo" class="img-fluid">
+      </picture>
+    <% end %>
+    <div class="d-flex align-items-center ml-auto">
+      <% if user_signed_in? %>
+        <%= link_to new_post_path, class: 'btn btn-primary me-2 d-lg-block d-none' do %>
+          post <i class="fa-regular fa-pen-to-square"></i>
+        <% end %>
+      <% end %>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><%= link_to 'トップ', root_path, class: 'nav-link' %></li>
+        <li class="nav-item"><%= link_to 'ランキング', rankings_posts_path, class: 'nav-link' %></li>
+        <li class="nav-item">
+          <div class="vr mx-3" style="width: 2px; height: 100%;"></div>
+        </li>
         <% if user_signed_in? %>
-          <li class="nav-item"><%= link_to 'アカウント情報', edit_user_registration_path, class: 'nav-link' %></li>
+          <li class="nav-item"><%= link_to current_user.user_name || 'n/a', user_path(current_user), class: 'nav-link' %></li>
           <li class="nav-item"><%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'トップページ', root_path, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'ランキングページ', rankings_posts_path, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'Yes！一覧', '#', class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'ブックマーク一覧', '#', class: 'nav-link' %></li>
+          <li class="nav-item"><%= link_to 'Yes!一覧', '#', class: 'nav-link' %></li>
+          <li class="nav-item"><%= link_to 'ブックマーク一覧', bookmarks_path, class: 'nav-link' %></li>
           <li class="nav-item"><%= link_to '投稿一覧', '#', class: 'nav-link' %></li>
           <li class="nav-item"><%= link_to 'コメント一覧', '#', class: 'nav-link' %></li>
+          <li class="nav-item">
+            <div class="vr mx-3" style="width: 2px; height: 100%;"></div>
+          </li>
         <% else %>
           <li class="nav-item"><%= link_to '新規登録', new_user_registration_path, class: 'nav-link' %></li>
           <li class="nav-item"><%= link_to 'ログイン', new_user_session_path, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'トップページ', root_path, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'ランキングページ', rankings_posts_path, class: 'nav-link' %></li>
         <% end %>
       </ul>
+      <%= form_with url: search_path, method: :get, local: true, class: 'd-flex ms-3' do %>
+        <div class="input-group me-3">
+          <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "form-control" %>
+        </div>
+        <div class="dropdown me-3">
+          <button class="btn btn-outline-light dropdown-toggle" type="button" id="searchTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">一致タイプ</button>
+          <ul class="dropdown-menu" aria-labelledby="searchTypeDropdown">
+            <li><%= radio_button_tag :search_type, 'exact_match', params[:search_type] == 'exact_match', id: 'search_type_exact' %> <%= label_tag 'search_type_exact', '完全一致' %></li>
+            <li><%= radio_button_tag :search_type, 'forward_match', params[:search_type] == 'forward_match', id: 'search_type_forward' %> <%= label_tag 'search_type_forward', '前方一致' %></li>
+            <li><%= radio_button_tag :search_type, 'backward_match', params[:search_type] == 'backward_match', id: 'search_type_backward' %> <%= label_tag 'search_type_backward', '後方一致' %></li>
+            <li><%= radio_button_tag :search_type, 'partial_match', params[:search_type] == 'partial_match', id: 'search_type_partial' %> <%= label_tag 'search_type_partial', '部分一致' %></li>
+          </ul>
+        </div>
+        <div class="form-check form-check-inline me-3">
+          <%= radio_button_tag :search_category, 'user', params[:search_category] == 'user', id: 'search_category_user', class: "form-check-input" %>
+          <%= label_tag 'search_category_user', raw('<i class="fa-solid fa-user" style="color: #8eb4f5;"></i>'), class: "form-check-label" %>
+        </div>
+        <div class="form-check form-check-inline me-3">
+          <%= radio_button_tag :search_category, 'post', params[:search_category] == 'post', id: 'search_category_post', class: "form-check-input" %>
+          <%= label_tag 'search_category_post', raw('<i class="fa-solid fa-note-sticky" style="color: #8ef59a;"></i>'), class: "form-check-label" %>
+        </div>
+        <button class="btn btn-outline-success" type="submit" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .25rem; --bs-btn-font-size: .75rem;"><i class="fa-solid fa-magnifying-glass" style="color: #63E6BE;"></i></button>
+      <% end %>
     </div>
   </div>
 </header>
-

@@ -4,8 +4,13 @@
   <%= render "users/shared/error_messages", resource: resource %>
 
   <div class="field">
+    <%= f.label :user_name, "User Name" %><br />
+    <%= f.text_field :user_name, autofocus: true, autocomplete: "username" %>
+  </div>
+
+  <div class="field">
     <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= f.email_field :email, autocomplete: "email" %>
   </div>
 
   <div class="field">
@@ -27,3 +32,4 @@
 <% end %>
 
 <%= render "users/shared/links" %>
+

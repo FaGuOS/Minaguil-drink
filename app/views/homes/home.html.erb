@@ -1,2 +1,122 @@
-<h1>Homes#home</h1>
-<p>Find me in app/views/homes/home.html.erb</p>
+<% content_for :page_title do %>
+  Home
+<% end %>
+<div class="row mt-4">
+  <div class="col-md-6">
+    <h2>New Reviews</h2>
+    <table class="table">
+      <tbody>
+        <% if @new_reviews.present? %>
+          <% @new_reviews.each_slice(2) do |reviews| %>
+            <tr>
+              <% reviews.each do |review| %>
+                <td>
+                  <div class="review-card">
+                    <%= link_to post_path(review) do %>
+                      <%= image_tag(review.image.attached? ? url_for(review.image) : 'Reviewonly.png', class: 'review-image') %>
+                      <div class="overlay">
+                        <div class="overlay-text">
+                          <%= link_to review.title, post_path(review), class: 'text-white' %><br>
+                          <%= link_to review.user.user_name, '#', class: 'text-white' %>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                </td>
+              <% end %>
+              <% (2 - reviews.size).times do %>
+                <td>
+                  <div class="review-card">
+                    <%= image_tag('nopost.png', class: 'review-image') %>
+                    <div class="overlay">
+                      <div class="overlay-text">
+                        <span class="text-white">no post</span><br>
+                        <span class="text-white">***</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+          <% if @new_reviews.size % 2 != 0 %>
+            <tr>
+              <td>
+                <div class="review-card">
+                  <%= image_tag('nopost.png', class: 'review-image') %>
+                  <div class="overlay">
+                    <div class="overlay-text">
+                      <span class="text-white">no post</span><br>
+                      <span class="text-white">***</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <% 2.times do %>
+            <tr>
+              <td>
+                <div class="review-card">
+                  <%= image_tag('nopost.png', class: 'review-image') %>
+                  <div class="overlay">
+                    <div class="overlay-text">
+                      <span class="text-white">no post</span><br>
+                      <span class="text-white">***</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="review-card">
+                  <%= image_tag('nopost.png', class: 'review-image') %>
+                  <div class="overlay">
+                    <div class="overlay-text">
+                      <span class="text-white">no post</span><br>
+                      <span class="text-white">***</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-md-6">
+    <h2>Weekly Highlight!!</h2>
+    <div class="card mb-4">
+      <ul class="list-group list-group-flush">
+        <% if @weekly_posts.present? %>
+          <% @weekly_posts.each do |post| %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <%= link_to post.title, post_path(post) %>
+              <span class="badge badge-primary badge-pill"><%= post.yes %></span>
+            </li>
+          <% end %>
+          <% (6 - @weekly_posts.size).times do %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>no post</span>
+              <span class="badge badge-primary badge-pill">****</span>
+            </li>
+          <% end %>
+        <% else %>
+          <% 6.times do %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>no post</span>
+              <span class="badge badge-primary badge-pill">****</span>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+    <div class="d-flex flex-column align-items-center">
+      <%= link_to 'All Reviews', posts_path, class: 'btn btn-primary btn-custom mb-2' %>
+      <%= link_to 'Ranking!!', rankings_posts_path, class: 'btn btn-secondary btn-custom mb-2' %>
+    </div>
+  </div>
+</div>

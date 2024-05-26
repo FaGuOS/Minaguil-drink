@@ -1,1 +1,171 @@
 @use '~bootstrap/scss/bootstrap';
+
+/* 基本レイアウト設定 */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 50px;
+}
+
+@media (max-width: 418px) {
+  .main-content {
+    flex: 1; /* 小さい画面用のパディング */
+    padding: 20px;
+  }
+}
+
+.content {
+  flex: 1;
+}
+
+footer {
+  background-color: #343a40;
+  color: white;
+  text-align: right;
+  padding: 10px 0;
+}
+
+/* ナビゲーションバー関連 */
+.navbar .separator {
+  display: inline-block;
+  width: 10px;
+}
+
+.navbar .navbar-brand img {
+  width: 70% !important;
+  height: auto;
+}
+
+@media (max-width: 418px) {
+  .navbar-brand img {
+    width: 100px; /* 小さい画面用の画像幅 */
+    height: auto;
+  }
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler-icon {
+  color: white;
+}
+
+
+/* コンポーネントのスタイル */
+.image-with-margin {
+  margin: 20px; /* 画像の外側に20pxの余白を追加 */
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+h1.display-4 {
+  font-size: 2.5rem;
+}
+
+.badge-pill {
+  font-size: 1rem;
+}
+
+.review-card {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  margin: 10px;
+  overflow: hidden;
+}
+
+.review-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
+  padding: 30px 0;
+}
+
+.overlay-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 5px;
+}
+
+.fixed-button {
+  position: fixed;
+  bottom: 75px;
+  right: 75px;
+  z-index: 1000;
+}
+
+.btn-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  background-color: rgba(0, 123, 255, 0.5); /* 半透明 */
+  border: none;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.btn-circle:hover {
+  background-color: rgba(0, 123, 255, 1); /* 透明度解除 */
+}
+
+.page-title {
+  position: absolute;
+  top: 120px; /* ヘッダーの下に適切なスペースを確保する */
+  left: 60px; /* 左上に配置する */
+  z-index: 100; /* 必要に応じてz-indexを調整する */
+  font-size: 2.5rem; /* 必要に応じてフォントサイズを調整する */
+  margin: 0; /* デフォルトのマージンをリセット */
+}
+
+@media (max-width: 418px) {
+  .page-title {
+    position: absolute;
+    top: 110px; /* ヘッダーの下に適切なスペースを確保する */
+    left: 35px; /* 左上に配置する */
+    z-index: 100; /* 必要に応じてz-indexを調整する */
+    font-size: 2rem; /* 必要に応じてフォントサイズを調整する */
+    margin: 0; /* デフォルトのマージンをリセット */
+  }
+}
+
+.grayed-out {
+  background-color: #f0f0f0;
+  opacity: 0.5;
+}

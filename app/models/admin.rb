@@ -3,6 +3,6 @@ class Admin < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   def admin?
-    self.admin
+    true
   end
 end

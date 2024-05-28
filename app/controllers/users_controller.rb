@@ -1,7 +1,8 @@
 # app/controllers/users_controller.rb
-class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:exit, :good_bye, :show, :activity]
+class UsersController < ApplicationController 
   before_action :set_user, only: [:show, :posts]
+  before_action :authenticate_user!, only: [:exit, :good_bye, :show, :activity]
+
 
   def show
     @posts = @user.posts.order(created_at: :desc)

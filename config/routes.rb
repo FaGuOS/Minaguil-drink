@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
   # HomesController
   root to: 'homes#top'
-
+  
   get '/home', to: 'homes#home'
   get '/about', to: 'homes#about'
-
+  
   # PostsController
   resources :posts do
     resource :yes, only: [:create, :destroy, :index]
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       get :rankings
       get :weekly_ranking
     end
-
+    
     resources :comments, only: [:index, :new, :create, :show, :destroy]
     post 'create_comment', to: 'posts#create_comment', as: 'create_comment'
     resources :bookmarks, only: [:create, :destroy]
@@ -37,7 +37,7 @@ Rails.application.routes.draw do
     sign_up: 'sign_up',
     password: 'password'
   }
-
+  
   get 'profile/:id', to: 'users#show', as: 'profile'
 
   # ユーザーまわり
@@ -48,24 +48,35 @@ Rails.application.routes.draw do
       get :posts
     end
   end
-
+  
   resources :bookmarks, only: [:index, :create, :destroy]
-
+  
   resources :tags, only: [:index, :show]
-
+  
   get 'search', to: 'searches#index', as: 'search'
-
+  
   get 'users/:id/activity', to: 'users#activity', as: 'user_activity'
-
+  
   # AdminSessionsController
-  devise_for :admins, controllers: {
+  devise_for :admins, path: 'admin', controllers: {
     sessions: 'admins/sessions',
-    registrations: 'admins/registrations'
+    registrations: 'admins/registrations',
+    passwords: 'devise/passwords'
+  }, path_names: {
+    sign_in: 'login',
+    sign_out: 'logout',
+    sign_up: 'register'
   }
 
   # Admin namespace
-  namespace :admin_panel do
-    get 'home', to: 'admins#home', as: :home  # ここでhomeルートを明確に定義
+  namespace :admins do
+    get 'home', to: 'dashboard#index', as: :home
+    resources :dashboard, only: [:index] do
+      member do
+        delete :destroy_user
+        delete :destroy_post
+      end
+    end
     resources :posts, only: [:index, :show, :destroy]
     resources :reports, only: [:index, :show, :destroy]
     resources :users, except: [:new, :create, :destroy]

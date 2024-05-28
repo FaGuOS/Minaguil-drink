@@ -7,15 +7,14 @@ class Post < ApplicationRecord
     validates :rate, inclusion: { in: 1..5, message: "must be between 1 and 5" }
   end
 
-  #validate :policy_agreement_must_be_accepted # ポリシー同意のバリデーションを追加
+  has_one_attached :image, dependent: :destroy
 
-  has_one_attached :image
   belongs_to :user
   has_many :comments, dependent: :destroy
   has_many :yeses, dependent: :destroy
-  has_many :bookmarks
+  has_many :bookmarks, dependent: :destroy
   has_many :bookmarking_users, through: :bookmarks, source: :user
-  has_many :views
+  has_many :views, dependent: :destroy
   has_many :viewers, through: :views, source: :user
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
@@ -23,13 +22,14 @@ class Post < ApplicationRecord
   attr_accessor :policy_agreement
 
   def self.looks(search, word)
-    if search == "exact_match"
+    case search
+    when "exact_match"
       where("title LIKE ?", "#{word}")
-    elsif search == "forward_match"
+    when "forward_match"
       where("title LIKE ?", "#{word}%")
-    elsif search == "backward_match"
+    when "backward_match"
       where("title LIKE ?", "%#{word}")
-    elsif search == "partial_match"
+    when "partial_match"
       where("title LIKE ?", "%#{word}%")
     else
       @user = User.all

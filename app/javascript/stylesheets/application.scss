@@ -239,3 +239,11 @@ body.admin-mode {
     top: 10px;
     right: 10px;
   }
+
+.admin-dashboard {
+  display: flex;
+}
+.admin-users, .admin-posts {
+  width: 50%;
+  padding: 10px;
+}

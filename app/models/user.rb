@@ -1,18 +1,15 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   # Deviseのモジュールをインクルード
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-         
-  has_many :posts
+
+  has_many :posts, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :yeses, dependent: :destroy
-  has_many :bookmarks
+  has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_posts, through: :bookmarks, source: :post
-  has_many :views
+  has_many :views, dependent: :destroy
   has_many :viewed_posts, through: :views, source: :post
-
 
   # バリデーション
   validates :user_name, presence: true, uniqueness: true, length: { maximum: 30 }
@@ -26,15 +23,23 @@ class User < ApplicationRecord
     HiddenPost.where(user_id: self.id).pluck(:post_id)
   end
 
+  # 管理者用のアクション
+  after_initialize :set_default_admin, if: :new_record?
+
+  def set_default_admin
+    self.admin ||= false
+  end
+
   # 検索用のアクション
   def self.looks(search, word)
-    if search == "exact_match"
+    case search
+    when "exact_match"
       where("user_name LIKE ?", "#{word}")
-    elsif search == "forward_match"
+    when "forward_match"
       where("user_name LIKE ?", "#{word}%")
-    elsif search == "backward_match"
+    when "backward_match"
       where("user_name LIKE ?", "%#{word}")
-    elsif search == "partial_match"
+    when "partial_match"
       where("user_name LIKE ?", "%#{word}%")
     else
       @user = User.all

@@ -47,7 +47,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    self.admin
+    self[:admin]
   end
 
   private

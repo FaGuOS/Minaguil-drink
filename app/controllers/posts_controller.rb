@@ -9,14 +9,6 @@ class PostsController < ApplicationController
     @posts = Post.order(yes: :desc).limit(10)
   end
 
-  # GET /posts/weekly_ranking
-  def weekly_ranking
-    one_week_ago = 7.days.ago
-    @posts = Post.where('created_at >= ?', one_week_ago)
-                 .order(yes: :desc)
-                 .limit(10)
-  end
-
   # GET /posts
   def index
     @posts = Post.all
@@ -174,11 +166,8 @@ class PostsController < ApplicationController
   end
   
   def sort_column
-    if current_user&.admin?
-      %w[created_at yes nonsence].include?(params[:sort]) ? params[:sort] : 'created_at'
-    else
-      %w[created_at yes].include?(params[:sort]) ? params[:sort] : 'created_at'
-    end
+    allowed_columns = current_user&.admin? ? %w[created_at yes nonsence] : %w[created_at yes]
+    allowed_columns.include?(params[:sort]) ? params[:sort] : 'created_at'
   end
 
   def sort_direction

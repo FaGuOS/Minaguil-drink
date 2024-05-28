@@ -11,6 +11,7 @@ unless Admin.exists?(email: 'admin@example.com')
     email: 'admin@example.com',
     password: 'securepassword',
     password_confirmation: 'securepassword'
+    admin: true
   )
   puts "Admin user created with email: admin@example.com and password: securepassword"
 else

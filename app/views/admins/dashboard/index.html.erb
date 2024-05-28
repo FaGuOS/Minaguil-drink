@@ -1,0 +1,51 @@
+<div class="container mt-4 admin-dashboard">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h2>Registered Users</h2>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <% if @users.present? %>
+              <% @users.each do |user| %>
+                <li class="list-group-item">
+                  <p>Username: <%= user.user_name %></p>
+                  <p>Email: <%= user.email %></p>
+                  <p>Review Count: <%= user.posts.count %></p>
+                  <%= link_to 'Delete', destroy_user_admins_dashboard_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
+                </li>
+              <% end %>
+            <% else %>
+              <li class="list-group-item">No users found.</li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h2>Posted Reviews</h2>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <% if @posts.present? %>
+              <% @posts.each do |post| %>
+                <li class="list-group-item">
+                  <p>Username: <%= post.user.user_name %></p>
+                  <p>Title: <%= post.title %></p>
+                  <p>Comments: <%= post.comments.count %></p>
+                  <%= link_to 'Delete', destroy_post_admins_dashboard_path(post), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
+                </li>
+              <% end %>
+            <% else %>
+              <li class="list-group-item">No posts found.</li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

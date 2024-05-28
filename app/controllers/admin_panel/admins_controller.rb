@@ -3,7 +3,7 @@ module AdminPanel
     before_action :authenticate_admin!, only: :home
     skip_before_action :authenticate_user!, only: [:check, :check_password]
 
-    def home
+    def table_home
       @nonsense_posts = Post.where('nonsense > 0').includes(:user).order(nonsense: :desc)
     end
 
@@ -22,13 +22,17 @@ module AdminPanel
     private
 
     def authenticate_admin!
-      unless current_admin
+      unless admin_signed_in?
         redirect_to new_admin_session_path, alert: '管理者権限が必要です。'
       end
     end
 
+    def admin_signed_in?
+      current_admin.present?
+    end
+
     def current_admin
-      current_user if current_user&.admin?
+      current_admin_user
     end
   end
 end

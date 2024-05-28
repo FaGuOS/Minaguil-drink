@@ -19,74 +19,82 @@
     </div>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><%= link_to 'トップ', root_path, class: 'nav-link' %></li>
-        <li class="nav-item">
-          <div class="vr mx-3" style="width: 2px; height: 100%;"></div>
-        </li>
         <% if user_signed_in? %>
-          <li class="nav-item"><%= link_to current_user.user_name || 'n/a', user_path(current_user), class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'ブックマーク一覧', bookmarks_path, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'アシアト', user_activity_path(current_user), class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'コメント一覧', '#', class: 'nav-link' %></li>
           <% if current_user.admin? %>
-            <li class="nav-item"><%= link_to '管理者ページ', admin_home_path, class: 'nav-link' %></li>
+            <!-- 管理者としてログインしている場合 -->
+            <li class="nav-item">
+              <span class="nav-link"><%= current_user.user_name %></span>
+            </li>
+            <li class="nav-item"><%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link' %></li>
+          <% else %>
+            <!-- 一般ユーザーとしてログインしている場合 -->
+            <li class="nav-item"><%= link_to 'トップ', root_path, class: 'nav-link' %></li>
+            <li class="nav-item">
+              <div class="vr mx-3" style="width: 2px; height: 100%;"></div>
+            </li>
+            <li class="nav-item"><%= link_to current_user.user_name || 'n/a', user_path(current_user), class: 'nav-link' %></li>
+            <li class="nav-item"><%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link' %></li>
+            <li class="nav-item"><%= link_to 'ブックマーク一覧', bookmarks_path, class: 'nav-link' %></li>
+            <li class="nav-item"><%= link_to 'アシアト', user_activity_path(current_user), class: 'nav-link' %></li>
+            <li class="nav-item">
+              <div class="vr mx-3" style="width: 2px; height: 100%;"></div>
+            </li>
           <% end %>
-          <li class="nav-item">
-            <div class="vr mx-3" style="width: 2px; height: 100%;"></div>
-          </li>
         <% else %>
+          <!-- 未ログインの場合 -->
           <li class="nav-item"><%= link_to '新規登録', new_user_registration_path, class: 'nav-link' %></li>
           <li class="nav-item"><%= link_to 'ログイン', new_user_session_path, class: 'nav-link' %></li>
         <% end %>
       </ul>
-      <%= form_with url: search_path, method: :get, local: true, class: 'd-flex ms-3' do %>
-        <div class="input-group me-3">
-          <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "form-control" %>
-        </div>
-        <div class="dropdown me-3">
-          <button class="btn btn-outline-light dropdown-toggle" type="button" id="searchTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-            一致タイプ
-          </button>
-          <ul class="dropdown-menu p-3" aria-labelledby="searchTypeDropdown">
-            <li class="form-check">
-              <%= radio_button_tag :search_type, 'exact_match', params[:search_type] == 'exact_match', id: 'search_type_exact', class: "form-check-input" %>
-              <%= label_tag 'search_type_exact', '完全一致', class: "form-check-label" %>
-            </li>
-            <li class="form-check">
-              <%= radio_button_tag :search_type, 'forward_match', params[:search_type] == 'forward_match', id: 'search_type_forward', class: "form-check-input" %>
-              <%= label_tag 'search_type_forward', '前方一致', class: "form-check-label" %>
-            </li>
-            <li class="form-check">
-              <%= radio_button_tag :search_type, 'backward_match', params[:search_type] == 'backward_match', id: 'search_type_backward', class: "form-check-input" %>
-              <%= label_tag 'search_type_backward', '後方一致', class: "form-check-label" %>
-            </li>
-            <li class="form-check">
-              <%= radio_button_tag :search_type, 'partial_match', params[:search_type] == 'partial_match', id: 'search_type_partial', class: "form-check-input" %>
-              <%= label_tag 'search_type_partial', '部分一致', class: "form-check-label" %>
-            </li>
-          </ul>
-        </div>
-        <div class="dropdown me-3">
-          <button class="btn btn-outline-light dropdown-toggle" type="button" id="searchCategoryDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-            検索カテゴリ
-          </button>
-          <ul class="dropdown-menu p-3" aria-labelledby="searchCategoryDropdown">
-            <li class="form-check">
-              <%= radio_button_tag :search_category, 'user', params[:search_category] != 'post' && params[:search_category] != 'tag', id: 'search_category_user', class: "form-check-input" %>
-              <%= label_tag 'search_category_user', raw('<i class="fa-solid fa-user" style="color: #8eb4f5;"></i> User'), class: "form-check-label" %>
-            </li>
-            <li class="form-check">
-              <%= radio_button_tag :search_category, 'post', params[:search_category] == 'post', id: 'search_category_post', class: "form-check-input" %>
-              <%= label_tag 'search_category_post', raw('<i class="fa-solid fa-note-sticky" style="color: #8ef59a;"></i> Post'), class: "form-check-label" %>
-            </li>
-            <li class="form-check">
-              <%= radio_button_tag :search_category, 'tag', params[:search_category] == 'tag', id: 'search_category_tag', class: "form-check-input" %>
-              <%= label_tag 'search_category_tag', raw('<i class="fa-solid fa-quote-left" style="color: #fc761d;"></i> Tag'), class: "form-check-label" %>
-            </li>
-          </ul>
-        </div>
-        <button class="btn btn-outline-success" type="submit" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .25rem; --bs-btn-font-size: .75rem;"><i class="fa-solid fa-magnifying-glass" style="color: #63E6BE;"></i></button>
+      <% unless user_signed_in? && current_user.admin? %>
+        <%= form_with url: search_path, method: :get, local: true, class: 'd-flex ms-3' do %>
+          <div class="input-group me-3">
+            <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "form-control" %>
+          </div>
+          <div class="dropdown me-3">
+            <button class="btn btn-outline-light dropdown-toggle" type="button" id="searchTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+              一致タイプ
+            </button>
+            <ul class="dropdown-menu p-3" aria-labelledby="searchTypeDropdown">
+              <li class="form-check">
+                <%= radio_button_tag :search_type, 'exact_match', params[:search_type] == 'exact_match', id: 'search_type_exact', class: "form-check-input" %>
+                <%= label_tag 'search_type_exact', '完全一致', class: "form-check-label" %>
+              </li>
+              <li class="form-check">
+                <%= radio_button_tag :search_type, 'forward_match', params[:search_type] == 'forward_match', id: 'search_type_forward', class: "form-check-input" %>
+                <%= label_tag 'search_type_forward', '前方一致', class: "form-check-label" %>
+              </li>
+              <li class="form-check">
+                <%= radio_button_tag :search_type, 'backward_match', params[:search_type] == 'backward_match', id: 'search_type_backward', class: "form-check-input" %>
+                <%= label_tag 'search_type_backward', '後方一致', class: "form-check-label" %>
+              </li>
+              <li class="form-check">
+                <%= radio_button_tag :search_type, 'partial_match', params[:search_type] == 'partial_match', id: 'search_type_partial', class: "form-check-input" %>
+                <%= label_tag 'search_type_partial', '部分一致', class: "form-check-label" %>
+              </li>
+            </ul>
+          </div>
+          <div class="dropdown me-3">
+            <button class="btn btn-outline-light dropdown-toggle" type="button" id="searchCategoryDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+              検索カテゴリ
+            </button>
+            <ul class="dropdown-menu p-3" aria-labelledby="searchCategoryDropdown">
+              <li class="form-check">
+                <%= radio_button_tag :search_category, 'user', params[:search_category] != 'post' && params[:search_category] != 'tag', id: 'search_category_user', class: "form-check-input" %>
+                <%= label_tag 'search_category_user', raw('<i class="fa-solid fa-user" style="color: #8eb4f5;"></i> User'), class: "form-check-label" %>
+              </li>
+              <li class="form-check">
+                <%= radio_button_tag :search_category, 'post', params[:search_category] == 'post', id: 'search_category_post', class: "form-check-input" %>
+                <%= label_tag 'search_category_post', raw('<i class="fa-solid fa-note-sticky" style="color: #8ef59a;"></i> Post'), class: "form-check-label" %>
+              </li>
+              <li class="form-check">
+                <%= radio_button_tag :search_category, 'tag', params[:search_category] == 'tag', id: 'search_category_tag', class: "form-check-input" %>
+                <%= label_tag 'search_category_tag', raw('<i class="fa-solid fa-quote-left" style="color: #fc761d;"></i> Tag'), class: "form-check-label" %>
+              </li>
+            </ul>
+          </div>
+          <button class="btn btn-outline-success" type="submit" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .25rem; --bs-btn-font-size: .75rem;"><i class="fa-solid fa-magnifying-glass" style="color: #63E6BE;"></i></button>
+        <% end %>
       <% end %>
     </div>
   </div>

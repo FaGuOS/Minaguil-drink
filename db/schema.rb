@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_23_133314) do
+ActiveRecord::Schema.define(version: 2024_05_28_024347) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2024_05_23_133314) do
     t.integer "view_count", default: 0, null: false
     t.integer "yes", default: 0, null: false
     t.boolean "hidden", default: false
+    t.integer "rate", default: 0, null: false
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
@@ -110,6 +111,21 @@ ActiveRecord::Schema.define(version: 2024_05_23_133314) do
     t.index ["user_id"], name: "index_reports_on_user_id"
   end
 
+  create_table "taggings", force: :cascade do |t|
+    t.integer "post_id", null: false
+    t.integer "tag_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_taggings_on_post_id"
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -123,6 +139,15 @@ ActiveRecord::Schema.define(version: 2024_05_23_133314) do
     t.boolean "admin"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "views", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "post_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_views_on_post_id"
+    t.index ["user_id"], name: "index_views_on_user_id"
   end
 
   create_table "yeses", force: :cascade do |t|
@@ -144,6 +169,10 @@ ActiveRecord::Schema.define(version: 2024_05_23_133314) do
   add_foreign_key "hidden_posts", "users"
   add_foreign_key "reports", "posts"
   add_foreign_key "reports", "users"
+  add_foreign_key "taggings", "posts"
+  add_foreign_key "taggings", "tags"
+  add_foreign_key "views", "posts"
+  add_foreign_key "views", "users"
   add_foreign_key "yeses", "posts"
   add_foreign_key "yeses", "users"
 end

@@ -5,19 +5,28 @@ class SearchesController < ApplicationController
     @search_category = params[:search_category]
 
     if @query.present?
-      if @search_category == 'user'
+      case @search_category
+      when 'user'
         @users = User.looks(@search_type, @query)
         @posts = Post.none
-      elsif @search_category == 'post'
+        @tags = Tag.none
+      when 'post'
         @users = User.none
         @posts = Post.looks(@search_type, @query)
+        @tags = Tag.none
+      when 'tag'
+        @users = User.none
+        @tags = Tag.where("name LIKE ?", "%#{@query}%")
+        @posts = Post.joins(:tags).where(tags: { id: @tags.pluck(:id) })
       else
         @users = User.none
         @posts = Post.none
+        @tags = Tag.none
       end
     else
       @users = User.none
       @posts = Post.none
+      @tags = Tag.none
     end
   end
 end

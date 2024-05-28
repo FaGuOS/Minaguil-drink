@@ -1,0 +1,6 @@
+var tagElements = document.querySelectorAll('.badge');
+tagElements.forEach(function(tagElement) {
+  if (tagElement.innerText.trim() === '<%= @tag %>') {
+    tagElement.remove();
+  }
+});

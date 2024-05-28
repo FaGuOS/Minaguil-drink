@@ -10,7 +10,9 @@ class User < ApplicationRecord
   has_many :yeses, dependent: :destroy
   has_many :bookmarks
   has_many :bookmarked_posts, through: :bookmarks, source: :post
-  
+  has_many :views
+  has_many :viewed_posts, through: :views, source: :post
+
 
   # バリデーション
   validates :user_name, presence: true, uniqueness: true, length: { maximum: 30 }

@@ -1,6 +1,6 @@
 class YesesController < ApplicationController
-  before_action :set_post
-
+  before_action :set_post, only: [:create, :destroy]
+  before_action :authenticate_user!
 
   def create
     post = Post.find(params[:post_id])
@@ -20,6 +20,10 @@ class YesesController < ApplicationController
     else
       redirect_to post_path(post), alert: 'Yesの取り消しに失敗しました。'
     end
+  end
+
+  def index
+    @yes_posts = current_user.yeses.includes(:post).map(&:post)
   end
 
   private

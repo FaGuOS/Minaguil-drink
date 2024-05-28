@@ -3,19 +3,35 @@
 <% end %>
 
 <div class="container mt-4">
-  <h2>Bookmarked Posts</h2>
+  <h2>ブックマークしたレビュー</h2>
 
   <% if @bookmarked_posts.any? %>
-    <div class="list-group">
-      <% @bookmarked_posts.each do |post| %>
-        <a href="<%= post_path(post) %>" class="list-group-item list-group-item-action">
-          <h5 class="mb-1"><%= post.title %></h5>
-          <p class="mb-1"><%= truncate(post.review, length: 100) %></p>
-          <small>Bookmarked at <%= l(post.created_at, format: :short) %></small>
-        </a>
-      <% end %>
-    </div>
+    <% @bookmarked_posts.each do |post| %>
+      <div class="card mb-3 position-relative">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <% if post.image.attached? %>
+              <%= image_tag post.image, class: 'img-thumbnail mb-2', size: "200x200" %>
+            <% else %>
+              <%= image_tag 'Reviewonly.png', class: 'img-thumbnail mb-2', size: "200x200" %>
+            <% end %>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title"><%= post.title %></h5>
+              <p class="card-text"><%= truncate(post.review, length: 100) %></p>
+              <p class="card-text"><small class="text-muted">Bookmarked at: <%= post.created_at.strftime("%Y-%m-%d %H:%M:%S") %></small></p>
+              <p class="card-text"><small class="text-muted">Yes数: <%= post.yes %></small></p>
+            </div>
+          </div>
+          <a href="<%= post_path(post) %>" class="stretched-link"></a>
+        </div>
+      </div>
+    <% end %>
   <% else %>
-    <p>You have not bookmarked any posts yet.</p>
+    <br><h4>まだブックマークされたレビューがないようです…</h4><br>
+    <h4>投稿されたレビューの「 <i class="fa-regular fa-bookmark" style="color: #74C0FC;"></i> 」をクリックして
+    ブックマークを行ってみましょう。</h4><br>
+    <h4><i class="fa-regular fa-bookmark" style="color: #74C0FC;"></i> ─ bookmark! → <i class="fa-solid fa-bookmark" style="color: #74C0FC;"></i></h4>
   <% end %>
 </div>

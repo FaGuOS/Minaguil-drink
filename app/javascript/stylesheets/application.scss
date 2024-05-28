@@ -18,13 +18,6 @@ html, body {
   padding: 50px;
 }
 
-@media (max-width: 418px) {
-  .main-content {
-    flex: 1; /* 小さい画面用のパディング */
-    padding: 20px;
-  }
-}
-
 .content {
   flex: 1;
 }
@@ -47,13 +40,6 @@ footer {
   height: auto;
 }
 
-@media (max-width: 418px) {
-  .navbar-brand img {
-    width: 100px; /* 小さい画面用の画像幅 */
-    height: auto;
-  }
-}
-
 .navbar-toggler {
   border: none;
 }
@@ -62,10 +48,9 @@ footer {
   color: white;
 }
 
-
 /* コンポーネントのスタイル */
 .image-with-margin {
-  margin: 20px; /* 画像の外側に20pxの余白を追加 */
+  margin: 10px; /* 画像の外側に20pxの余白を追加 */
 }
 
 .card-title {
@@ -94,10 +79,11 @@ h1.display-4 {
   overflow: hidden;
 }
 
-.review-image {
+.review-card img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
+  margin: 4px;
 }
 
 .overlay {
@@ -154,7 +140,83 @@ h1.display-4 {
   margin: 0; /* デフォルトのマージンをリセット */
 }
 
+.grayed-out {
+  background-color: #f0f0f0;
+  opacity: 0.5;
+}
+
+.col-md-5 {
+  margin-top: 5px;
+}
+
+.h2.mb-4 {
+  margin-top: 2px;
+}
+
+/* New Reviews section */
+.review-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.25rem; /* 角丸 */
+}
+
+.review-card img {
+  object-fit: cover;
+  height: 260px; /* 画像の高さを一定にする */
+}
+
+.review-card .card-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5); /* 半透明の背景 */
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.review-card .card-title,
+.review-card .card-text {
+  margin: 0;
+}
+
+/* Weekly Highlight section */
+.carousel-item img {
+  object-fit: cover;
+  height: 400px; /* 画像の高さを一定にする */
+  border-radius: 0.25rem; /* 角丸 */
+  margin: 4px;
+}
+
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.5); /* 半透明の背景 */
+  padding: 10px;
+}
+
+body.admin-mode {
+  background-color: #343a40;
+  color: white;
+}
+
+.list-group-item-action.bg-dark:hover {
+  background-color: #495057;
+  color: white;
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
 @media (max-width: 418px) {
+  .main-content {
+    flex: 1; /* 小さい画面用のパディング */
+    padding: 20px;
+  }
+  .navbar-brand img {
+    width: 100px; /* 小さい画面用の画像幅 */
+    height: auto;
+  }
   .page-title {
     position: absolute;
     top: 110px; /* ヘッダーの下に適切なスペースを確保する */
@@ -165,7 +227,15 @@ h1.display-4 {
   }
 }
 
-.grayed-out {
-  background-color: #f0f0f0;
-  opacity: 0.5;
+.img-thumbnail {
+  width: 100%;  /* コンテナの幅に合わせる */
+  height: auto;
+  object-fit: cover;  /* 画像の比率を維持しながらコンテナに合わせる */
+  margin: 4px;
 }
+
+  .position-absolute {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }

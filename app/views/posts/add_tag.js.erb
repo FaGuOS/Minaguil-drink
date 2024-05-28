@@ -1,0 +1,9 @@
+var tagElement = document.createElement('div');
+tagElement.className = 'badge bg-secondary me-2 mb-2';
+tagElement.innerHTML = `
+  <%= @tag %>
+  <button type="button" class="btn-close ms-2" aria-label="Close" onclick="removeTag('<%= @tag %>')"></button>
+`;
+document.getElementById('tags-container').appendChild(tagElement);
+document.getElementById('tag-input').value = '';
+document.getElementById('add-tag-button').disabled = true;

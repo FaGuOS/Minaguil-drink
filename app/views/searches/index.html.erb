@@ -3,6 +3,8 @@
 
   <% if @posts.any? %>
     <h2>Posts</h2>
+    <p><strong>Tags:</strong> <%= @tags.map(&:name).join(', ') %></p>
+    <p><strong>Number of posts with the tags:</strong> <%= @posts.count %></p>
     <div class="list-group mb-4">
       <% @posts.each do |post| %>
         <a href="<%= post_path(post) %>" class="list-group-item list-group-item-action">
@@ -15,7 +17,7 @@
 
   <% if @users.any? %>
     <h2>Users</h2>
-    <div class="list-group">
+    <div class="list-group mb-4">
       <% @users.each do |user| %>
         <a href="<%= user_path(user) %>" class="list-group-item list-group-item-action">
           <h5><%= user.user_name.presence || 'n/a' %></h5>
@@ -24,7 +26,18 @@
     </div>
   <% end %>
 
-  <% if @users.none? && @posts.none? %>
+  <% if @tags.any? %>
+    <h2>Tags</h2>
+    <div class="list-group mb-4">
+      <% @tags.each do |tag| %>
+        <div class="list-group-item">
+          <h5><%= tag.name %></h5>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @users.none? && @posts.none? && @tags.none? %>
     <p>No results found</p>
   <% end %>
 </div>

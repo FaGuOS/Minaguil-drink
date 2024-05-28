@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :hide, :hide_selected, :nonsence]
-  before_action :set_post, only: [:show, :edit, :update, :destroy, :hide, :nonsence]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :hide, :hide_selected, :search_yes, :nonsence]
+  before_action :set_post, only: [:show, :edit, :update, :destroy, :hide, :nonsence, :add_tag, :remove_tag]
   before_action :correct_user, only: [:edit, :update, :destroy]
   before_action :admin_user, only: [:hide_selected]
 
@@ -20,8 +20,9 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @posts = Post.all
-    @posts = @posts.order("#{params[:sort]} #{params[:direction]}") if params[:sort].present? && params[:direction].present?
-    @posts = @posts.page(params[:page]).per(20)
+    @posts = @posts.where.not(id: current_user.hidden_posts.pluck(:post_id)) if user_signed_in?
+    @posts = @posts.order("#{sort_column} #{sort_direction}")
+    @posts = @posts.page(params[:page]).per(9)
   end
 
   # GET /posts/:id
@@ -41,11 +42,11 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     @post.user = current_user
 
-    unless @post.image.attached?
-      @post.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'Reviewonly.png')), filename: 'Reviewonly.png', content_type: 'image/png')
-    end
-
     if @post.save
+      unless @post.image.attached?
+        @post.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'Reviewonly.png')), filename: 'Reviewonly.png', content_type: 'image/png')
+      end
+      update_tags(@post)
       redirect_to @post, notice: 'SUCCESS!!'
     else
       flash.now[:alert] = 'FAIL, Can you try that one more time?'
@@ -60,6 +61,7 @@ class PostsController < ApplicationController
   # PUT /posts/:id
   def update
     if @post.update(post_params)
+      update_tags(@post)
       redirect_to @post, notice: 'UPDATED!!'
     else
       flash[:alert] = 'FAIL, Can you try that one more time?'
@@ -84,7 +86,6 @@ class PostsController < ApplicationController
   end
   
   def increment_yes
-    @post = Post.find(params[:id])
     yes = Yes.find_by(user: current_user, post: @post)
 
     if yes
@@ -112,7 +113,7 @@ class PostsController < ApplicationController
   end
   
   def bookmark
-    # ブックマーク処理の実装（後で追加）
+    # ブックマーク処理の実装
     render json: { bookmarked: true }
   end
 
@@ -122,21 +123,45 @@ class PostsController < ApplicationController
     redirect_to posts_path, notice: 'Selected posts have been hidden.'
   end
 
+  def search_yes
+    @yes_posts = current_user.yeses.includes(:post).map(&:post)
+  end
+  
   # POST /posts/:id/nonsence
   def nonsence
     current_user.hidden_posts << @post
     @post.increment!(:nonsence)
     redirect_to posts_path, notice: 'Post has been marked as nonsence and hidden.'
   end
+  
+  # タグ処理の実装
+  def add_tag
+    @tag = params[:tag]
+    @post.tag_list.add(@tag)
+    @post.save
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def remove_tag
+    @tag = params[:tag]
+    @post.tag_list.remove(@tag)
+    @post.save
+    respond_to do |format|
+      format.js
+    end
+  end
 
   private
 
   def set_post
-    @post = Post.find(params[:id])
+    @post = Post.find_by(id: params[:id])
+    redirect_to posts_path, notice: 'Post not found' if @post.nil?
   end
 
   def post_params
-    params.require(:post).permit(:title, :review, :image, :policy_agreement, :yes, :nonsence, :hidden)
+    params.require(:post).permit(:title, :review, :image, :policy_agreement, :yes, :nonsence, :hidden, :rate, :tag_list)
   end
 
   def comment_params
@@ -149,7 +174,7 @@ class PostsController < ApplicationController
   end
   
   def sort_column
-    if current_user.admin?
+    if current_user&.admin?
       %w[created_at yes nonsence].include?(params[:sort]) ? params[:sort] : 'created_at'
     else
       %w[created_at yes].include?(params[:sort]) ? params[:sort] : 'created_at'
@@ -162,5 +187,12 @@ class PostsController < ApplicationController
 
   def admin_user
     redirect_to(root_url) unless current_user&.admin?
+  end
+  
+  def update_tags(post)
+    if params[:post][:tag_list].present?
+      tags = params[:post][:tag_list].split(',').map(&:strip)
+      post.tags = tags.map { |tag_name| Tag.find_or_create_by(name: tag_name) }
+    end
   end
 end

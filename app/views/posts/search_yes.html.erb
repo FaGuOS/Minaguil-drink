@@ -1,0 +1,6 @@
+<% @yes_posts.each do |post| %>
+  <div class="post">
+    <h2><%= link_to post.title, post_path(post) %></h2>
+    <p><%= post.review %></p>
+  </div>
+<% end %>

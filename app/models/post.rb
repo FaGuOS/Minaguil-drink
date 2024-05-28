@@ -4,6 +4,7 @@ class Post < ApplicationRecord
     validates :review
     validates :policy_agreement
     validates :yes
+    validates :rate, inclusion: { in: 1..5, message: "must be between 1 and 5" }
   end
 
   #validate :policy_agreement_must_be_accepted # ポリシー同意のバリデーションを追加
@@ -14,6 +15,10 @@ class Post < ApplicationRecord
   has_many :yeses, dependent: :destroy
   has_many :bookmarks
   has_many :bookmarking_users, through: :bookmarks, source: :user
+  has_many :views
+  has_many :viewers, through: :views, source: :user
+  has_many :taggings, dependent: :destroy
+  has_many :tags, through: :taggings
 
   attr_accessor :policy_agreement
 
@@ -28,6 +33,16 @@ class Post < ApplicationRecord
       where("title LIKE ?", "%#{word}%")
     else
       @user = User.all
+    end
+  end
+
+  def tag_list
+    tags.map(&:name).join(', ')
+  end
+
+  def tag_list=(names)
+    self.tags = names.split(',').map do |n|
+      Tag.where(name: n.strip).first_or_create!
     end
   end
 

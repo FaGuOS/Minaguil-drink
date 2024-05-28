@@ -6,4 +6,7 @@ module ApplicationHelper
     else key
     end
   end
+  def display_rate(rate)
+    rate.present? ? "#{rate} / 5" : "考え中…"
+  end
 end

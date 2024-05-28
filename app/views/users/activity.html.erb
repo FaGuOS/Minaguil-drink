@@ -1,0 +1,87 @@
+<div class="container-fluid mt-4">
+  <% content_for :page_title do %>
+    Your footprints!
+  <% end %>
+
+  <div class="row">
+    <!-- 左側：最近の投稿 -->
+    <div class="col-md-4">
+      <h2>トウコウしたレビュー</h2>
+      <% @recent_posts.each do |post| %>
+        <div class="card mb-3 position-relative">
+           <div class="row g-0">
+            <div class="col-md-4">
+              <% if post.image.attached? %>
+                <%= image_tag post.image, class: 'img-thumbnail mb-2', size: "200x200" %>
+              <% else %>
+                <%= image_tag 'Reviewonly.png', class: 'img-thumbnail mb-2', size: "200x200" %>
+              <% end %>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title"><%= post.title %></h5>
+                <p class="card-text"><%= truncate(post.review, length: 100) %></p>
+                <p class="card-text"><small class="text-muted">投稿日時: <%= post.created_at.strftime("%Y-%m-%d %H:%M:%S") %></small></p>
+                <p class="card-text"><small class="text-muted">Yes数: <%= post.yes %></small></p>
+              </div>
+            </div>
+            <a href="<%= post_path(post) %>" class="stretched-link"></a>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 中央：閲覧した記事 -->
+    <div class="col-md-4">
+      <h2>チェックしたレビュー</h2>
+      <% @viewed_posts.each do |post| %>
+        <div class="card mb-3 position-relative">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <% if post.image.attached? %>
+                <%= image_tag post.image, class: 'img-thumbnail mb-2', size: "200x200" %>
+              <% else %>
+                <%= image_tag 'Reviewonly.png', class: 'img-thumbnail mb-2', size: "200x200" %>
+              <% end %>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title"><%= post.title %></h5>
+                <p class="card-text"><%= truncate(post.review, length: 100) %></p>
+                <p class="card-text"><small class="text-muted">投稿日時: <%= post.created_at.strftime("%Y-%m-%d %H:%M:%S") %></small></p>
+                <p class="card-text"><small class="text-muted">Yes数: <%= post.yes %></small></p>
+              </div>
+            </div>
+            <a href="<%= post_path(post) %>" class="stretched-link"></a>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 右側：Yesを行った記事 -->
+    <div class="col-md-4">
+      <h2>気に入ったレビュー</h2>
+      <% @yes_posts.each do |post| %>
+        <div class="card mb-3 position-relative">
+           <div class="row g-0">
+            <div class="col-md-4">
+              <% if post.image.attached? %>
+                <%= image_tag post.image, class: 'img-thumbnail mb-2', size: "200x200" %>
+              <% else %>
+                <%= image_tag 'Reviewonly.png', class: 'img-thumbnail mb-2', size: "200x200" %>
+              <% end %>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title"><%= post.title %></h5>
+                <p class="card-text"><%= truncate(post.review, length: 100) %></p>
+                <p class="card-text"><small class="text-muted">投稿日時: <%= post.created_at.strftime("%Y-%m-%d %H:%M:%S") %></small></p>
+                <p class="card-text"><small class="text-muted">Yes数: <%= post.yes %></small></p>
+              </div>
+            </div>
+            <a href="<%= post_path(post) %>" class="stretched-link"></a>
+          </div>
+        </div>
+      <% end %>
+    </div>
+</div>

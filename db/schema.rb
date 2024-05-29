@@ -62,11 +62,11 @@ ActiveRecord::Schema.define(version: 2024_05_28_024347) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.string "comment_1"
-    t.string "comment_2"
+    t.text "comment_1"
+    t.text "comment_2"
+    t.integer "post_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "post_id", null: false
     t.integer "user_id"
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
@@ -134,10 +134,11 @@ ActiveRecord::Schema.define(version: 2024_05_28_024347) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "personal_id"
+    t.integer "personal_id", null: false
     t.string "user_name"
-    t.boolean "admin"
+    t.boolean "admin", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["personal_id"], name: "index_users_on_personal_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 

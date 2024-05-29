@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
   # HomesController
   root to: 'homes#top'
-  
+
   get '/home', to: 'homes#home'
   get '/about', to: 'homes#about'
-  
+
   # PostsController
   resources :posts do
     resource :yes, only: [:create, :destroy, :index]
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       get :rankings
       get :weekly_ranking
     end
-    
+
     resources :comments, only: [:index, :new, :create, :show, :destroy]
     post 'create_comment', to: 'posts#create_comment', as: 'create_comment'
     resources :bookmarks, only: [:create, :destroy]
@@ -37,7 +37,7 @@ Rails.application.routes.draw do
     sign_up: 'sign_up',
     password: 'password'
   }
-  
+
   get 'profile/:id', to: 'users#show', as: 'profile'
 
   # ユーザーまわり
@@ -48,15 +48,15 @@ Rails.application.routes.draw do
       get :posts
     end
   end
-  
+
   resources :bookmarks, only: [:index, :create, :destroy]
-  
+
   resources :tags, only: [:index, :show]
-  
+
   get 'search', to: 'searches#index', as: 'search'
-  
+
   get 'users/:id/activity', to: 'users#activity', as: 'user_activity'
-  
+
   # AdminSessionsController
   devise_for :admins, path: 'admin', controllers: {
     sessions: 'admins/sessions',

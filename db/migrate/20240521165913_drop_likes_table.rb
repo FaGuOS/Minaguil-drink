@@ -1,13 +1,12 @@
 class DropLikesTable < ActiveRecord::Migration[6.1]
   def up
-    drop_table :likes
+    drop_table :likes if ActiveRecord::Base.connection.table_exists?('likes')
   end
 
   def down
     create_table :likes do |t|
-      t.references :user, null: false, foreign_key: true
-      t.references :post, null: false, foreign_key: true
-      t.integer :value, default: 0, null: false
+      t.integer :user_id
+      t.integer :post_id
 
       t.timestamps
     end

@@ -6,14 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-unless Admin.exists?(email: 'admin@example.com')
-  Admin.create!(
-    email: 'admin@example.com',
-    password: 'securepassword',
-    password_confirmation: 'securepassword',
-    admin: true
-    )
-  puts "Admin user created with email: admin@example.com and password: securepassword"
-else
-  puts "Admin user already exists with email: admin@example.com"
+Admin.find_or_create_by!(email: 'admin@example.com') do |admin|
+  admin.password = 'securepassword'
 end

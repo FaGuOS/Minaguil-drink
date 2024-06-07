@@ -1,45 +1,46 @@
+# frozen_string_literal: true
+
 class Admins::SessionsController < Devise::SessionsController
-  before_action :configure_sign_in_params, only: [:create]
-  before_action :check_admin, only: [:create]
+  # before_action :check_admin, only: [:create]
 
   # GET /admin/login
-  def new
-    super
-  end
+  # def new
+  #  super
+  # end
 
   # POST /admin/login
-  def create
-    self.resource = warden.authenticate!(auth_options)
-    if resource.admin?
-      set_flash_message!(:notice, :signed_in)
-      sign_in(resource_name, resource)
-      respond_with resource, location: after_sign_in_path_for(resource)
-    else
-      sign_out resource
-      flash[:alert] = "You are not authorized to access this page."
-      redirect_to new_admin_session_path
-    end
+def create
+  admin = Admin.find_by(email: params[:admin][:email])
+  if admin&.valid_password?(params[:admin][:password])
+    set_flash_message!(:notice, :signed_in)
+    sign_in(:admin, admin)
+    redirect_to admins_home_path
+  else
+    flash[:alert] = "Invalid email or password."
+    redirect_to new_admin_session_path
   end
+end
 
-  # DELETE /admin/logout
-  def destroy
-    super
-  end
 
   protected
 
   # 管理者ユーザーかどうかをチェックするメソッド
-  def check_admin
-    user = User.find_by(email: params[:admin][:email])
-    unless user&.admin?
-      flash[:alert] = "You are not authorized to access this page."
-      redirect_to new_admin_session_path
-    end
-  end
+  # def check_admin
+  #   user = Admin.find_by(email: params[:admin][:email])
+  #   Rails.logger.debug "Check admin user: #{user.inspect}"
+  #   unless user&.admin?
+  #     flash[:alert] = "You are not authorized to access this page."
+  #     redirect_to new_admin_session_path
+  #   end
+  # end
 
   # If you have extra params to permit, append them to the sanitizer.
-  def configure_sign_in_params
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:email, :password])
+  #def configure_sign_in_params
+  #  devise_parameter_sanitizer.permit(:sign_in, keys: [:email, :password])
+  #end
+
+  # 管理者ログイン後のリダイレクト先を設定する
+  def after_sign_in_path_for(resource)
+    admins_home_path
   end
 end
-

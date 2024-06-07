@@ -43,11 +43,11 @@
               <% else %>
                 <div class="text-center">
                   <% if current_user.yeses.exists?(post_id: @post.id) %>
-                    <%= link_to post_yes_path(@post.id), method: :delete, class: "btn btn-outline-success" do %>
+                    <%= link_to post_yes_post_path(@post.id), method: :delete, class: "btn btn-outline-success" do %>
                       <i class="fa-solid fa-handshake" style="color: #63E6BE;"></i>
                     <% end %>
                   <% else %>
-                    <%= link_to post_yeses_path(@post.id), method: :post, class: "btn btn-outline-success" do %>
+                    <%= link_to post_yes_post_path(@post.id), method: :post, class: "btn btn-outline-success" do %>
                       <i class="fa-regular fa-handshake" style="color: #63E6BE;"></i>
                     <% end %>
                   <% end %>
@@ -115,6 +115,7 @@
           <p class="card-text"><%= @post.review %></p>
           <p><strong>Rate:</strong> <%= @post.rate %> / 5</p>
         </div>
+        <span class="sentiment-score">本文の感情分析スコア<%= @post.score %></span>
       </div>
 
       <!-- コメント投稿フォーム -->
@@ -203,14 +204,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  function previewImage(event) {
-    var reader = new FileReader();
-    reader.onload = function(){
-      var output = document.getElementById('image_preview');
-      output.src = reader.result;
-    };
-    reader.readAsDataURL(event.target.files[0]);
-  }
-</script>

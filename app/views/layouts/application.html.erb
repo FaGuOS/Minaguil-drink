@@ -8,14 +8,19 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>  <!-- defer 属性を追加 -->
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
 </head>
-<bodyclass="<%= 'admin-mode' if controller_path.start_with?('admin') %>">
-  <h1 class="page-title"><%= yield(:page_title) %></h1> <!-- 各ページで定義されるタイトルを表示 -->
+<body class="<%= 'admin-mode' if controller_path.start_with?('admin') %>">
+  <h1 class="page-title"><%= yield(:page_title) %></h1>
   <div class="site-wrapper">
     <header>
       <%= render 'layouts/header' %>
     </header>
+    <% flash.each do |key, value| %>
+      <div class="alert alert-<%= key == 'notice' ? 'success' : 'danger' %> text-right">
+        <%= value %>
+      </div>
+    <% end %>
     <main class="main-content">
       <%= yield %>
     </main>

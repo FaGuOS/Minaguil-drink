@@ -8,7 +8,7 @@
       </picture>
     <% end %>
     <div class="d-flex align-items-center ml-auto">
-      <% if user_signed_in? %>
+      <% if user_signed_in? || admin_signed_in? %>
         <%= link_to new_post_path, class: 'btn btn-primary me-2 d-lg-block d-none' do %>
           post <i class="fa-regular fa-pen-to-square"></i>
         <% end %>
@@ -20,7 +20,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <% if user_signed_in? %>
-          <% if current_user.admin? %>
+          <% if current_user.is_a?(Admin) %>
             <!-- 管理者としてログインしている場合 -->
             <li class="nav-item">
               <span class="nav-link"><%= current_user.user_name %></span>
@@ -36,18 +36,23 @@
             <li class="nav-item"><%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link' %></li>
             <li class="nav-item"><%= link_to 'ブックマーク一覧', bookmarks_path, class: 'nav-link' %></li>
             <li class="nav-item"><%= link_to 'アシアト', user_activity_path(current_user), class: 'nav-link' %></li>
-            <li class="nav-item"><%= link_to 'コメント一覧', '#', class: 'nav-link' %></li>
             <li class="nav-item">
               <div class="vr mx-3" style="width: 2px; height: 100%;"></div>
             </li>
           <% end %>
+        <% elsif admin_signed_in? %>
+          <!-- 管理者としてログインしている場合 -->
+          <li class="nav-item">
+            <span class="nav-link"><%= current_admin.email %></span>
+          </li>
+          <li class="nav-item"><%= link_to 'ログアウト', destroy_admin_session_path, method: :delete, class: 'nav-link' %></li>
         <% else %>
           <!-- 未ログインの場合 -->
           <li class="nav-item"><%= link_to '新規登録', new_user_registration_path, class: 'nav-link' %></li>
           <li class="nav-item"><%= link_to 'ログイン', new_user_session_path, class: 'nav-link' %></li>
         <% end %>
       </ul>
-      <% unless user_signed_in? && current_user.admin? %>
+      <% unless (user_signed_in? && current_user.is_a?(Admin)) || admin_signed_in? %>
         <%= form_with url: search_path, method: :get, local: true, class: 'd-flex ms-3' do %>
           <div class="input-group me-3">
             <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "form-control" %>

@@ -7,14 +7,14 @@ Rails.application.routes.draw do
 
   # PostsController
   resources :posts do
-    resource :yes, only: [:create, :destroy, :index]
     member do
       put :hide
-      post 'yes', to: 'posts#increment_yes'
-      post 'nonsence', to: 'posts#nonsence'
-      post 'add_tag'
-      delete 'remove_tag'
+      post :increment_yes
+      post :nonsence
+      post :add_tag
+      delete :remove_tag
     end
+
     collection do
       put 'hide_selected', to: 'posts#hide_selected', as: :hide_selected
       get :rankings
@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resources :comments, only: [:index, :new, :create, :show, :destroy]
     post 'create_comment', to: 'posts#create_comment', as: 'create_comment'
     resources :bookmarks, only: [:create, :destroy]
+    resource :yes, only: [:create, :destroy], as: :yes_post
   end
 
   # UsersController
@@ -62,16 +63,11 @@ Rails.application.routes.draw do
     sessions: 'admins/sessions',
     registrations: 'admins/registrations',
     passwords: 'devise/passwords'
-  }, path_names: {
-    sign_in: 'login',
-    sign_out: 'logout',
-    sign_up: 'register'
   }
-
   # Admin namespace
   namespace :admins do
     get 'home', to: 'dashboard#index', as: :home
-    resources :dashboard, only: [:index] do
+    resources :dashboard do
       member do
         delete :destroy_user
         delete :destroy_post

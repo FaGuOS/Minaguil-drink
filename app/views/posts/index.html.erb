@@ -43,8 +43,9 @@
                         <h4 class="card-title text-dark"><%= post.title %></h4>
                       <% end %>
                       <p><strong>Rate:</strong> <%= display_rate(post.rate) %></p>
+                      <span class="sentiment-score"><strong>本文の感情分析スコア<%= post.score %></strong></span>
                       <p class="card-text"><%= truncate(post.review, length: 100, omission: '...') %></p>
-                      <p class="card-text"><strong>Yes:</strong> <%= post.yes %></p>
+                      <p class="card-text"><strong>Yes:</strong> <%= post.yeses.count %></p>
                       <% if current_user&.admin? %>
                         <p class="card-text"><strong>Nonsence:</strong> <%= post.nonsence %></p>
                       <% end %>

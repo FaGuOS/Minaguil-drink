@@ -3,140 +3,77 @@
     Edit Review!
   <% end %>
   <div class="row">
-    <!-- 左側のユーザー情報と画像アップロードフォーム -->
-    <div class="col-md-4">
+    <div class="col-md-12">
       <div class="card mb-4">
         <div class="card-body">
-          <h5 class="card-title">ユーザー名: <%= current_user.user_name %></h5>
-          <div class="mb-3">
-            <%= form_with model: @post, local: true, html: { multipart: true } do |form| %>
-              <div class="form-group">
-                <label for="image_preview">添付画像</label>
-                <%= image_tag @post.image.attached? ? url_for(@post.image) : 'Reviewonly.png', id: 'image_preview', class: 'img-thumbnail mb-2' %>
-                <%= form.file_field :image, class: 'form-control', onchange: 'previewImage(event)' %>
+          <%= form_with model: @post, local: true, html: { multipart: true } do |form| %>
+            <div class="row">
+              <!-- 左側のユーザー情報と画像アップロードフォーム -->
+              <div class="col-md-4">
+                <h5 class="card-title">ユーザー名: <%= current_user.user_name %></h5>
+                <div class="form-group mb-3">
+                  <%= form.label :image, "添付画像", for: "post_image" %>
+                  <%= image_tag @post.image.attached? ? url_for(@post.image) : 'Reviewonly.png', id: 'image_preview', class: 'img-thumbnail mb-2' %>
+                  <%= form.file_field :image, id: 'post_image', class: 'form-control', onchange: 'previewImage(event)' %>
+                </div>
               </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- 右側の入力フォーム -->
-    <div class="col-md-8">
-      <div class="card mb-4">
-        <div class="card-body">
-          <%= form_with model: @post, local: true do |form| %>
-            <div class="form-group mb-3">
-              <%= form.label :title, "タイトル" %>
-              <%= form.text_field :title, class: "form-control", required: true, value: @post.title %>
-            </div>
-            <div class="form-group">
-              <%= form.label :rate, "Rate" %>
-              <%= form.select :rate, options_for_select(1..5), {}, class: "form-control" %>
-            </div>
+              <!-- 右側の入力フォーム -->
+              <div class="col-md-8">
+                <div class="form-group mb-3">
+                  <%= form.label :title, "タイトル", for: "post_title" %>
+                  <%= form.text_field :title, id: "post_title", class: "form-control", required: true, value: @post.title %>
+                </div>
+                <div class="form-group">
+                  <%= form.label :rate, "Rate", for: "post_rate" %>
+                  <%= form.select :rate, options_for_select(1..5), {}, class: "form-control", id: "post_rate" %>
+                </div>
 
-            <!-- タグ追加フォーム -->
-            <div class="form-group">
-              <%= form.label :tag_list, "Tags (comma separated)" %>
-              <div class="input-group mb-3">
-                <%= form.text_field :tag_list, id: "tag-input", class: "form-control", value: "" %> <!-- タグ入力フィールドを空に -->
-                <button type="button" id="add-tag-button" class="btn btn-outline-secondary">タグ追加</button>
-              </div>
-              <div id="tags-container">
-                <% (@post.tag_list.is_a?(String) ? @post.tag_list.split(',') : @post.tag_list).each do |tag| %>
-                  <div class="badge bg-secondary me-2 mb-2">
-                    <%= tag %>
-                    <button type="button" class="btn-close ms-2" aria-label="Close" onclick="removeTag('<%= tag %>')"></button>
+                <!-- タグ追加フォーム -->
+                <div class="form-group">
+                  <%= form.label :tag_list, "Tags (comma separated)", for: "tag-input" %>
+                  <div class="input-group mb-3">
+                    <%= form.text_field :tag_list, id: "tag-input", class: "form-control", value: "" %>
+                    <button type="button" id="add-tag-button" class="btn btn-outline-secondary">タグ追加</button>
+                  </div>
+                  <div id="tags-container">
+                    <% (@post.tag_list.is_a?(String) ? @post.tag_list.split(',') : @post.tag_list).each do |tag| %>
+                      <div class="badge bg-secondary me-2 mb-2">
+                        <%= tag %>
+                        <button type="button" class="btn-close ms-2" aria-label="Close" onclick="removeTag('<%= tag %>')"></button>
+                      </div>
+                    <% end %>
+                  </div>
+                  <!-- hidden field for tag_list -->
+                  <%= form.hidden_field :tag_list, id: "tag-list-hidden", value: @post.tag_list.is_a?(Array) ? @post.tag_list.join(',') : @post.tag_list %>
+                </div>
+
+                <div class="form-group mb-3">
+                  <%= form.label :review, "本文", for: "post_review" %>
+                  <%= form.text_area :review, rows: 10, id: "post_review", class: "form-control", required: true %>
+                </div>
+                <div class="form-check mb-3">
+                  <%= form.check_box :policy_agreement, { required: true, id: "post_policy_agreement" }, true, false %>
+                  <%= form.label :policy_agreement, "ポリシーに同意し、投稿内容を編集しました。", for: "post_policy_agreement" %>
+                </div>
+                <% if @post.errors.any? %>
+                  <div class="alert alert-danger">
+                    <ul>
+                      <% @post.errors.full_messages.each do |message| %>
+                        <li><%= message %></li>
+                      <% end %>
+                    </ul>
                   </div>
                 <% end %>
+                <div class="text-end">
+                  <%= form.submit '編集を行う', class: 'btn btn-primary' %>
+                  <%= link_to 'レビューへ戻る', post_path(@post), class: 'btn btn-secondary' %>
+                </div>
               </div>
-              <!-- hidden field for tag_list -->
-              <%= form.hidden_field :tag_list, id: "tag-list-hidden", value: @post.tag_list.is_a?(Array) ? @post.tag_list.join(',') : @post.tag_list %>
-            </div>
-
-            <div class="form-group mb-3">
-              <%= form.label :review, "本文" %>
-              <%= form.text_area :review, rows: 10, class: "form-control", required: true %>
-            </div>
-            <div class="form-check mb-3">
-              <%= form.check_box :policy_agreement, { required: true }, true, false %>
-              <%= form.label :policy_agreement, "ポリシーに同意し、投稿内容を編集しました。" %>
-            </div>
-            <% if @post.errors.any? %>
-              <div class="alert alert-danger">
-                <ul>
-                  <% @post.errors.full_messages.each do |message| %>
-                    <li><%= message %></li>
-                  <% end %>
-                </ul>
-              </div>
-            <% end %>
-            <div class="text-end">
-              <%= form.submit '編集を行う', class: 'btn btn-primary' %>
-              <%= link_to 'レビューへ戻る', post_path(@post), class: 'btn btn-secondary' %>
-            </div>
-          <% end %>
+            </div> <!-- ここでrowを閉じます -->
+          <% end %> <!-- ここでform_withを閉じます -->
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const tagInput = document.getElementById('tag-input');
-  const addTagButton = document.getElementById('add-tag-button');
-  const tagsContainer = document.getElementById('tags-container');
-  const tagListHiddenInput = document.getElementById('tag-list-hidden');
-  let tags = <%= @post.tag_list.is_a?(String) ? @post.tag_list.split(',').to_json.html_safe : @post.tag_list.to_json.html_safe %>;
-
-  // 初期表示のためにタグを表示
-  displayTags();
-
-  // タグ追加ボタンのクリックイベント
-  addTagButton.addEventListener('click', function() {
-    const tagValue = tagInput.value.trim();
-    if (tagValue !== '' && !tags.includes(tagValue)) {
-      tags.push(tagValue);
-      displayTags();
-      updateHiddenTagList();
-    }
-  });
-
-  // タグ表示の更新
-  function displayTags() {
-    tagsContainer.innerHTML = '';
-    tags.forEach(tag => {
-      const tagElement = document.createElement('div');
-      tagElement.className = 'badge bg-secondary me-2 mb-2';
-      tagElement.innerHTML = `
-        ${tag}
-        <button type="button" class="btn-close ms-2" aria-label="Close" onclick="removeTag('${tag}')"></button>
-      `;
-      tagsContainer.appendChild(tagElement);
-    });
-    tagInput.value = '';  // タグ入力フィールドをクリア
-  }
-
-  // タグリスト更新
-  function updateHiddenTagList() {
-    tagListHiddenInput.value = tags.join(',');
-  }
-
-  // タグ削除関数
-  window.removeTag = function(tag) {
-    tags = tags.filter(t => t !== tag);
-    displayTags();
-    updateHiddenTagList();
-  }
-});
-
-function previewImage(event) {
-  var reader = new FileReader();
-  reader.onload = function() {
-    var output = document.getElementById('image_preview');
-    output.src = reader.result;
-  };
-  reader.readAsDataURL(event.target.files[0]);
-}
-</script>

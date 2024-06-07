@@ -32,6 +32,12 @@ class PostsController < ApplicationController
   # POST /posts
   def create
     @post = Post.new(post_params)
+    begin
+      @post.score = Language.get_data(post_params[:review])
+    rescue => e
+      flash.now[:alert] = "感情分析のエラー: #{e.message}"
+      render :new and return
+    end
     @post.user = current_user
 
     if @post.save

@@ -1,4 +1,4 @@
-<!-- app/views/users/profile.html.erb -->
+<!-- app/views/users/show.html.erb -->
 <div class="container">
   <div class="row">
     <div class="col-md-4">
@@ -15,6 +15,9 @@
           <p><strong>累計Yes数:</strong> <%= number_to_human(@total_yes, units: { thousand: 'k', million: 'm', billion: 'b', trillion: 't' }) %></p>
         </div>
       </div>
+      <button type="button" class="btn btn-danger mt-4" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+        アカウントの消去
+      </button>
     </div>
     <div class="col-md-8">
       <h2>最近の投稿</h2>
@@ -22,13 +25,33 @@
         <div class="card mb-3">
           <div class="card-body">
             <h5 class="card-title"><%= post.title %></h5>
-            <p style="margin-left: 20px;"><strong>Rate:</strong> <%= @post.rate %> / 5</p>
+            <p style="margin-left: 20px;"><strong>Rate:</strong> <%= post.rate %> / 5</p>
             <p class="card-text"><%= truncate(post.review, length: 100) %></p>
             <p class="card-text"><small class="text-muted">投稿日時: <%= post.created_at.strftime("%Y-%m-%d %H:%M:%S") %></small></p>
-            <p class="card-text"><small class="text-muted">Yes数: <%= post.yes %></small></p>
+            <p class="card-text"><small class="text-muted">Yes数: <%= post.yeses.count %></small></p>
           </div>
         </div>
       <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteAccountModalLabel">アカウント削除の確認</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>本当にアカウントを削除しますか？<br>「Good Bye」と入力して「アカウントを削除する」ボタンを押してください。</p>
+        <input type="text" id="confirmDeleteInput" class="form-control" placeholder="Good Bye">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+        <%= button_to 'アカウントを削除する', good_bye_user_path(@user), method: :delete, class: 'btn btn-danger', data: { confirm: '本当に削除しますか？' }, disabled: true, id: 'confirmDeleteButton' %>
+      </div>
     </div>
   </div>
 </div>

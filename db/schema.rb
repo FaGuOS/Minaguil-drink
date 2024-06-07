@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_28_024347) do
+ActiveRecord::Schema.define(version: 2024_06_07_085013) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 2024_05_28_024347) do
     t.integer "yes", default: 0, null: false
     t.boolean "hidden", default: false
     t.integer "rate", default: 0, null: false
+    t.decimal "score", precision: 5, scale: 3
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 

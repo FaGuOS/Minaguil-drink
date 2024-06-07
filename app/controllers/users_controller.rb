@@ -1,12 +1,12 @@
 # app/controllers/users_controller.rb
 class UsersController < ApplicationController 
-  before_action :set_user, only: [:show, :posts]
+  before_action :set_user, only: [:show, :activity]
   before_action :authenticate_user!, only: [:exit, :good_bye, :show, :activity]
-
 
   def show
     @posts = @user.posts.order(created_at: :desc)
-    @total_yes = @user.posts.sum(:yes) # ここでyesカラムを合計します
+    @total_yes = @user.posts.sum(:yes) # yesカラムの合計
+    @post = @posts.first # 例として最初の投稿を@postに設定
   end
 
   def exit
@@ -17,10 +17,6 @@ class UsersController < ApplicationController
     # ユーザーの退会処理
     current_user.destroy
     redirect_to root_path, notice: 'Good bye. サービスをご利用いただき、ありがとうございました。'
-  end
-
-  def posts
-    @posts = @user.posts
   end
 
   def activity

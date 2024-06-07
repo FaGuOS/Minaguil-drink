@@ -71,8 +71,11 @@ h1.display-4 {
   font-size: 1rem;
 }
 
+/* Review Card */
 .review-card {
   position: relative;
+  overflow: hidden;
+  border-radius: 0.25rem; /* 角丸 */
   width: 100%;
   height: 240px;
   margin: 10px;
@@ -80,10 +83,28 @@ h1.display-4 {
 }
 
 .review-card img {
+  object-fit: cover;
+  height: 260px; /* 画像の高さを一定にする */
   width: 100%;
   height: auto;
   object-fit: cover;
   margin: 4px;
+}
+
+.review-card .card-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5); /* 半透明の背景 */
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.review-card .card-title,
+.review-card .card-text {
+  margin: 0;
 }
 
 .overlay {
@@ -153,34 +174,6 @@ h1.display-4 {
   margin-top: 2px;
 }
 
-/* New Reviews section */
-.review-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 0.25rem; /* 角丸 */
-}
-
-.review-card img {
-  object-fit: cover;
-  height: 260px; /* 画像の高さを一定にする */
-}
-
-.review-card .card-body {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.5); /* 半透明の背景 */
-  color: white;
-  padding: 10px;
-  text-align: center;
-}
-
-.review-card .card-title,
-.review-card .card-text {
-  margin: 0;
-}
-
 /* Weekly Highlight section */
 .carousel-item img {
   object-fit: cover;
@@ -234,16 +227,21 @@ body.admin-mode {
   margin: 4px;
 }
 
-  .position-absolute {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
+.position-absolute {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 
 .admin-dashboard {
   display: flex;
 }
+
 .admin-users, .admin-posts {
   width: 50%;
   padding: 10px;
+}
+
+ext-right {
+  text-align: right;
 }

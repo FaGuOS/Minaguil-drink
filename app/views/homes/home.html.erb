@@ -7,14 +7,23 @@
     <div class="row">
       <% @new_reviews.first(4).each do |review| %>
         <div class="col-md-6 mb-3">
-          <div class="card review-card">
+          <div class="card review-card" style="position: relative;">
             <%= link_to post_path(review) do %>
               <%= image_tag(review.image.attached? ? url_for(review.image) : 'Reviewonly.png', class: 'card-img-top review-image') %>
-              <div class="card-body">
+              <div class="card-body text-center">
                 <h5 class="card-title"><%= review.title %></h5>
                 <p>Rate: <%= display_rate(review.rate) %></p>
                 <p class="card-text"><small>by <%= review.user.user_name %></small></p>
               </div>
+              <% if review.tags.exists?(name: '質問') %>
+                <i class="fa-solid fa-question fa-2xl" style="color: #cccccc; position: absolute; bottom: 20px; right: 10px;"></i>
+              <% else %>
+                <% if review.score > 0 %>
+                  <i class="fa-solid fa-thumbs-up fa-2xl" style="color: #cccccc; position: absolute; bottom: 20px; right: 10px;"></i>
+                <% else %>
+                  <i class="fa-solid fa-thumbs-down fa-2xl" style="color: #cccccc; position: absolute; bottom: 20px; right: 10px;"></i>
+                <% end %>
+              <% end %>
             <% end %>
           </div>
         </div>
@@ -23,7 +32,7 @@
         <div class="col-md-6 mb-3">
           <div class="card review-card">
             <%= image_tag('nopost.png', class: 'card-img-top review-image') %>
-            <div class="card-body">
+            <div class="card-body text-center">
               <h5 class="card-title">no post</h5>
               <p class="card-text"><small>***</small></p>
             </div>
@@ -66,7 +75,7 @@
     <div class="d-flex flex-column align-items-center mt-3">
       <div class="card stretch-card mb-2" style="height: auto;">
         <%= link_to posts_path, class: 'stretched-link' do %>
-          <%= image_tag 'ALLReviews.png', class: 'card-img', style: 'height: 90px; object-fit: cover;' %>
+          <%= image_tag 'ALLReviews.png', class: 'card-img', style: "height: 90px; object-fit: cover;" %>
           <div class="card-img-overlay d-flex align-items-center justify-content-center">
           </div>
         <% end %>

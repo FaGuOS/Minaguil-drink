@@ -49,7 +49,7 @@
                 <div class="form-check mb-3">
                   <%= form.check_box :policy_agreement, { required: true, id: "post_policy_agreement" }, true, false %>
                   <%= form.label :policy_agreement, "ポリシーに同意します", for: "post_policy_agreement" %>
-                  <%= link_to "ポリシーに関してはこちら(別ページへ遷移します。)", about_path %>
+                  <%= link_to "(ポリシーに関してはこちら(別ページへ遷移します。)", about_path %>
                 </div>
                 <% if @post.errors.any? %>
                   <div class="alert alert-danger">

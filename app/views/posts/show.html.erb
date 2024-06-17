@@ -7,7 +7,17 @@
     <div class="col-md-4">
       <div class="card mb-4">
         <div class="card-body text-center">
-          <h5 class="card-title">ユーザー名: <%= @post.user.user_name %></h5>
+          <h5 class="card-title">
+            <% if @post.tags.exists?(name: '質問') %>
+              <i class="fa-solid fa-comments fa-xl" style="color: #55ff55;"></i>
+            <% else %>
+              <% if @post.score > 0 %>
+                <i class="fa-solid fa-thumbs-up fa-xl" style="color: #ff99cc;"></i>
+              <% else %>
+                <i class="fa-solid fa-thumbs-down fa-xl" style="color: #87ceeb;"></i>
+              <% end %>
+            <% end %>
+            : <%= @post.user.user_name %></h5>
           <div class="mb-4">
             <% if @post.image.attached? %>
               <%= image_tag @post.image, id: 'image_preview', class: 'img-thumbnail mb-4', size: "200x200" %>
@@ -112,10 +122,12 @@
               <% end %>
             </div>
           </div>
+          <% if @post.tags.exists?(name: '質問') %>
+            <% else %>
+            <p><strong>Rate:</strong> <%= @post.rate %> / 5</p>
+          <% end %>
           <p class="card-text"><%= @post.review %></p>
-          <p><strong>Rate:</strong> <%= @post.rate %> / 5</p>
         </div>
-        <span class="sentiment-score">本文の感情分析スコア<%= @post.score %></span>
       </div>
 
       <!-- コメント投稿フォーム -->

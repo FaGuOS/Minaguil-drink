@@ -12,7 +12,6 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @posts = Post.all
-    @posts = @posts.where.not(id: current_user.hidden_posts.pluck(:post_id)) if user_signed_in?
     @posts = @posts.order("#{sort_column} #{sort_direction}")
     @posts = @posts.page(params[:page]).per(9)
   end
@@ -115,23 +114,24 @@ class PostsController < ApplicationController
     render json: { bookmarked: true }
   end
 
-  # PUT /posts/hide_selected
-  def hide_selected
-    Post.where(id: params[:post_ids]).update_all(hidden: true)
-    redirect_to posts_path, notice: 'Selected posts have been hidden.'
-  end
-
   def search_yes
     @yes_posts = current_user.yeses.includes(:post).map(&:post)
   end
   
   # POST /posts/:id/nonsence
   def nonsence
-    current_user.hidden_posts << @post
-    @post.increment!(:nonsence)
-    redirect_to posts_path, notice: 'Post has been marked as nonsence and hidden.'
+    @post = Post.find(params[:id])
+    current_user.hidden_posts.create(post: @post)
+
+    redirect_to posts_path, notice: 'Post has been hidden.'
   end
-  
+
+  # PUT /posts/hide_selected
+  def hide_selected
+    Post.where(id: params[:post_ids]).update_all(hidden: true)
+    redirect_to posts_path, notice: 'Selected posts have been hidden.'
+  end
+
   # タグ処理の実装
   def add_tag
     @tag = params[:tag]

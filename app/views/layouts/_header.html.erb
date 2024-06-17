@@ -86,15 +86,15 @@
             </button>
             <ul class="dropdown-menu p-3" aria-labelledby="searchCategoryDropdown">
               <li class="form-check">
-                <%= radio_button_tag :search_category, 'user', params[:search_category] != 'post' && params[:search_category] != 'tag', id: 'search_category_user', class: "form-check-input" %>
+                <%= radio_button_tag :search_category, 'ユーザー', params[:search_category] != 'post' && params[:search_category] != 'tag', id: 'search_category_user', class: "form-check-input" %>
                 <%= label_tag 'search_category_user', raw('<i class="fa-solid fa-user" style="color: #8eb4f5;"></i> User'), class: "form-check-label" %>
               </li>
               <li class="form-check">
-                <%= radio_button_tag :search_category, 'post', params[:search_category] == 'post', id: 'search_category_post', class: "form-check-input" %>
+                <%= radio_button_tag :search_category, 'レビュー', params[:search_category] == 'post', id: 'search_category_post', class: "form-check-input" %>
                 <%= label_tag 'search_category_post', raw('<i class="fa-solid fa-note-sticky" style="color: #8ef59a;"></i> Post'), class: "form-check-label" %>
               </li>
               <li class="form-check">
-                <%= radio_button_tag :search_category, 'tag', params[:search_category] == 'tag', id: 'search_category_tag', class: "form-check-input" %>
+                <%= radio_button_tag :search_category, 'タグ', params[:search_category] == 'tag', id: 'search_category_tag', class: "form-check-input" %>
                 <%= label_tag 'search_category_tag', raw('<i class="fa-solid fa-quote-left" style="color: #fc761d;"></i> Tag'), class: "form-check-label" %>
               </li>
             </ul>

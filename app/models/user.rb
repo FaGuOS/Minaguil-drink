@@ -10,6 +10,9 @@ class User < ApplicationRecord
   has_many :bookmarked_posts, through: :bookmarks, source: :post
   has_many :views, dependent: :destroy
   has_many :viewed_posts, through: :views, source: :post
+  
+  has_many :hidden_posts, dependent: :destroy
+  has_many :hidden_posted_posts, through: :hidden_posts, source: :post
 
   # バリデーション
   validates :user_name, presence: true, uniqueness: true, length: { maximum: 30 }
@@ -17,10 +20,10 @@ class User < ApplicationRecord
 
   # コールバック
   before_validation :generate_unique_personal_id, on: :create
-
+  
   # 非表示用のアクション
-  def hidden_posts
-    HiddenPost.where(user_id: self.id).pluck(:post_id)
+  def hidden_post_ids
+    hidden_posts.pluck(:post_id)
   end
 
   # 管理者用のアクション

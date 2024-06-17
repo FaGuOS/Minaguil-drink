@@ -99,23 +99,3 @@ function initializeImagePreviewFunctionality() {
   });
 }
 
-function initializeBootstrapComponents() {
-  // Bootstrapのツールチップなどを初期化
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
-  });
-}
-
-  document.addEventListener('turbolinks:load', function() {
-    var confirmInput = document.getElementById('confirmDeleteInput');
-    var confirmButton = document.getElementById('confirmDeleteButton');
-
-    confirmInput.addEventListener('input', function() {
-      if (confirmInput.value === 'Good Bye') {
-        confirmButton.removeAttribute('disabled');
-      } else {
-        confirmButton.setAttribute('disabled', true);
-      }
-    });
-  });

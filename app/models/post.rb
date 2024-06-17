@@ -18,6 +18,9 @@ class Post < ApplicationRecord
   has_many :viewers, through: :views, source: :user
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
+  has_many :hidden_post_associations, class_name: 'HiddenPost', dependent: :destroy
+  has_many :hidden_posts, through: :hidden_post_associations, source: :post
+
 
   attr_accessor :policy_agreement
 

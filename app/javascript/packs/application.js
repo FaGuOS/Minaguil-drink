@@ -17,15 +17,26 @@ import "bootstrap";
 import "../stylesheets/application";
 
 Rails.start()
-// Turbolinks.start()
+Turbolinks.start()
 ActiveStorage.start()
 
-// Turbolinksのイベントリスナーを追加
 document.addEventListener('turbolinks:load', function() {
+  initializeBootstrapComponents();
   initializeTagFunctionality();
   initializeImagePreviewFunctionality();
-  initializeBootstrapComponents();
 });
+
+function initializeBootstrapComponents() {
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+    new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+
+  var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+  popoverTriggerList.forEach(function (popoverTriggerEl) {
+    new bootstrap.Popover(popoverTriggerEl)
+  })
+}
 
 function initializeTagFunctionality() {
   const tagInput = document.getElementById('tag-input');
@@ -98,4 +109,3 @@ function initializeImagePreviewFunctionality() {
     }
   });
 }
-

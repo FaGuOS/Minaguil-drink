@@ -11,7 +11,7 @@ class HomesController < ApplicationController
 
   def home
     @new_reviews = Post.order(created_at: :desc).limit(4) # 直近の投稿を取得
-    @weekly_posts = Post.order(Arel.sql('RAND()')).limit(6) # MySQL用のランダムな投稿取得
+    @weekly_posts = Post.order("RANDOM()").limit(6) # MySQL用のランダムな投稿取得
   end
 
   private

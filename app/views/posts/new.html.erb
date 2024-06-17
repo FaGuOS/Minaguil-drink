@@ -32,7 +32,7 @@
 
                 <!-- タグ追加フォーム -->
                 <div class="form-group">
-                  <%= form.label :tag_list, "追加したいタグを入力", for: "tag-input" %>
+                  <%= form.label :tag_list, "追加したいタグを入力 　　※「質問」タグを適用すると、評価値は表示されなくなります。→ ", for: "tag-input" %> <button type="button" id="question-tag-button" class="btn btn-outline-secondary btn-sm">質問</button>
                   <div class="input-group mb-3">
                     <%= form.text_field :tag_list, id: "tag-input", class: "form-control" %>
                     <button type="button" id="add-tag-button" class="btn btn-outline-secondary">タグを追加</button>

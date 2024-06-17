@@ -24,6 +24,7 @@ document.addEventListener('turbolinks:load', function() {
   initializeBootstrapComponents();
   initializeTagFunctionality();
   initializeImagePreviewFunctionality();
+  initializeQuestionTagButton();
 });
 
 function initializeBootstrapComponents() {
@@ -107,5 +108,20 @@ function initializeImagePreviewFunctionality() {
     if (event.target.files.length > 0) {
       reader.readAsDataURL(event.target.files[0]);
     }
+  });
+}
+
+function initializeQuestionTagButton() {
+  const questionTagButton = document.getElementById('question-tag-button');
+  const tagInput = document.getElementById('tag-input');
+  const addTagButton = document.getElementById('add-tag-button');
+
+  if (!questionTagButton || !tagInput || !addTagButton) {
+    return;
+  }
+
+  questionTagButton.addEventListener('click', function() {
+    tagInput.value = '質問';
+    addTagButton.click();
   });
 }

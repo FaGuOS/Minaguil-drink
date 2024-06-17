@@ -1,5 +1,7 @@
 <div class="container mt-4">
-  <h1>Search Results</h1>
+  <% content_for :page_title do %>
+    Search Results
+  <% end %>
 
   <% if @posts.any? %>
     <h2>Posts</h2>

@@ -28,12 +28,8 @@
     <!-- 投稿内容のリスト -->
     <div class="col-md-12">
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <% if user_signed_in? %>
-          <% hidden_post_ids = current_user.hidden_posts.pluck(:post_id) %>
-        <% else %>
-          <% hidden_post_ids = [] %>
-        <% end %>
-
+        <% hidden_post_ids = user_signed_in? ? current_user.hidden_posts.pluck(:post_id) : [] %>
+        
         <% @posts.each do |post| %>
           <div class="col">
             <div class="card h-100 <%= hidden_post_ids.include?(post.id) ? 'gray-card' : 'post-card' %>" style="<%= hidden_post_ids.include?(post.id) ? '' : "background: linear-gradient(to bottom, #{post.tags.exists?(name: '質問') ? '#99ff99, #e6ffe6' : post.score > 0 ? '#ff99cc, #ffcce4' : '#87ceeb, #bcddeb'});" %>">

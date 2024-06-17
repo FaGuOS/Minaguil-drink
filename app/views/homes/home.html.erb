@@ -12,15 +12,19 @@
               <%= image_tag(review.image.attached? ? url_for(review.image) : 'Reviewonly.png', class: 'card-img-top review-image') %>
               <div class="card-body text-center">
                 <h5 class="card-title"><%= review.title %></h5>
-                <p>Rate: <%= display_rate(review.rate) %></p>
+                <% if review.tags.exists?(name: '質問') %>
+                  <br>
+                <% else %>
+                  <p>Rate: <%= display_rate(review.rate) %></p>
+                <% end %>
                 <p class="card-text"><small>by <%= review.user.user_name %></small></p>
               </div>
               <% if review.tags.exists?(name: '質問') %>
-                <i class="fa-solid fa-question fa-2xl" style="color: #cccccc; position: absolute; bottom: 20px; right: 10px;"></i>
+                <i class="fa-solid fa-comments fa-2xl" style="color: #cccccc; position: absolute; bottom: 20px; right: 10px;"></i>
               <% else %>
-                <% if review.score > 0 %>
+                <% if review.score.present? && review.score > 0 %>
                   <i class="fa-solid fa-thumbs-up fa-2xl" style="color: #cccccc; position: absolute; bottom: 20px; right: 10px;"></i>
-                <% else %>
+                <% elsif review.score.present? %>
                   <i class="fa-solid fa-thumbs-down fa-2xl" style="color: #cccccc; position: absolute; bottom: 20px; right: 10px;"></i>
                 <% end %>
               <% end %>
@@ -83,3 +87,4 @@
     </div>
   </div>
 </div>
+

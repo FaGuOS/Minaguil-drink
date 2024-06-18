@@ -11,9 +11,12 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.all
-    @posts = @posts.order("#{sort_column} #{sort_direction}")
-    @posts = @posts.page(params[:page]).per(9)
+    @posts = Post.left_joins(:yeses)
+                 .select('posts.*, COUNT(yeses.id) AS yeses_count')
+                 .group('posts.id')
+                 .order("#{sort_column} #{sort_direction}")
+                 .page(params[:page])
+                 .per(9)
   end
 
   # GET /posts/:id
@@ -172,14 +175,14 @@ class PostsController < ApplicationController
   end
   
   def sort_column
-    allowed_columns = current_user&.admin? ? %w[created_at yes nonsence] : %w[created_at yes]
-    allowed_columns.include?(params[:sort]) ? params[:sort] : 'created_at'
+    allowed_columns = current_user&.admin? ? %w[created_at yeses_count nonsence] : %w[created_at yeses_count]
+    allowed_columns.include?(params[:sort]) ? params[:sort] : 'yeses_count'
   end
 
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
   end
-
+  
   def admin_user
     redirect_to(root_url) unless current_user&.admin?
   end

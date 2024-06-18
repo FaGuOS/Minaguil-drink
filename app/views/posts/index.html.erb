@@ -10,18 +10,16 @@
         <div class="d-flex justify-content-between align-items-center">
           <span>ソート機能:</span>
           <div class="btn-group" role="group" aria-label="Sort by">
-            <input type="radio" class="btn-check" name="sort" id="sort_yes" value="yes" autocomplete="off" <%= params[:sort] == 'yes' || params[:sort].nil? ? 'checked' : '' %>>
-            <label class="btn btn-outline-primary" for="sort_yes"><i class="fa-solid fa-handshake" style="color: #63E6BE;"></i>  Yes数</label>
-
-            <input type="radio" class="btn-check" name="sort" id="sort_created_at" value="created_at" autocomplete="off" <%= params[:sort] == 'created_at' ? 'checked' : '' %>>
+            <input type="radio" class="btn-check" name="sort" id="sort_created_at" value="created_at" autocomplete="off" <%= params[:sort] == 'created_at' || params[:sort].nil? ? 'checked' : '' %>>
             <label class="btn btn-outline-primary" for="sort_created_at"><i class="fa-solid fa-calendar-days" style="color: #c8ff00;"></i> 投稿日時</label>
+            <input type="radio" class="btn-check" name="sort" id="sort_yes" value="yeses_count" autocomplete="off" <%= params[:sort] == 'yeses_count' ? 'checked' : '' %>>
+            <label class="btn btn-outline-primary" for="sort_yes"><i class="fa-solid fa-handshake" style="color: #63E6BE;"></i> Yes数</label>
           </div>
           <div class="btn-group" role="group" aria-label="Sort direction">
-            <input type="radio" class="btn-check" name="direction" id="direction_asc" value="asc" autocomplete="off" <%= params[:direction] == 'asc' || params[:direction].nil? ? 'checked' : '' %>>
-            <label class="btn btn-outline-primary" for="direction_asc"><i class="fa-solid fa-arrow-up-wide-short"></i></label>
-
-            <input type="radio" class="btn-check" name="direction" id="direction_desc" value="desc" autocomplete="off" <%= params[:direction] == 'desc' ? 'checked' : '' %>>
+            <input type="radio" class="btn-check" name="direction" id="direction_desc" value="desc" autocomplete="off" <%= params[:direction] == 'desc' || params[:direction].nil? ? 'checked' : '' %>>
             <label class="btn btn-outline-primary" for="direction_desc"><i class="fa-solid fa-arrow-down-wide-short"></i></label>
+            <input type="radio" class="btn-check" name="direction" id="direction_asc" value="asc" autocomplete="off" <%= params[:direction] == 'asc' ? 'checked' : '' %>>
+            <label class="btn btn-outline-primary" for="direction_asc"><i class="fa-solid fa-arrow-up-wide-short"></i></label>
           </div>
           <%= submit_tag 'ソート開始', class: 'btn btn-primary' %>
         </div>
@@ -34,7 +32,7 @@
     <div class="col-md-12">
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <% hidden_post_ids = user_signed_in? ? current_user.hidden_posts.pluck(:post_id) : [] %>
-        
+
         <% @posts.each do |post| %>
           <div class="col">
             <div class="card h-100 <%= hidden_post_ids.include?(post.id) ? 'gray-card' : 'post-card' %>" style="<%= hidden_post_ids.include?(post.id) ? '' : "background: linear-gradient(to bottom, #{post.tags.exists?(name: '質問') ? '#99ff99, #e6ffe6' : post.score > 0 ? '#ff99cc, #ffcce4' : '#87ceeb, #bcddeb'});" %>">
@@ -75,7 +73,7 @@
                       <% end %>
                     </div>
                   </div>
-                  <% if user_signed_in? %>
+                  <% if user_signed_in? && post.user != current_user %>
                     <div class="mt-auto d-flex justify-content-between">
                       <%= form_with url: nonsence_post_path(post), method: :post, local: true, class: 'warning-form', data: { confirm: 'Nonsenceとしてレビューを隠しますか？' } do %>
                         <button type="submit" class="btn btn-warning warning-button">

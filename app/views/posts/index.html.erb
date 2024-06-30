@@ -7,19 +7,29 @@
   <div class="row justify-content-center mb-3">
     <div class="col-md-6">
       <%= form_with url: posts_path, method: :get, local: true do %>
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
           <span>ソート機能:</span>
-          <div class="btn-group" role="group" aria-label="Sort by">
+          <div class="btn-group sort-options" role="group" aria-label="Sort by">
             <input type="radio" class="btn-check" name="sort" id="sort_created_at" value="created_at" autocomplete="off" <%= params[:sort] == 'created_at' || params[:sort].nil? ? 'checked' : '' %>>
-            <label class="btn btn-outline-primary" for="sort_created_at"><i class="fa-solid fa-calendar-days" style="color: #c8ff00;"></i> 投稿日時</label>
+            <label class="btn btn-outline-primary" for="sort_created_at">
+              <i class="fa-solid fa-calendar-days" style="color: #c8ff00;"></i>
+              <span class="sort-text">投稿日時</span>
+            </label>
             <input type="radio" class="btn-check" name="sort" id="sort_yes" value="yeses_count" autocomplete="off" <%= params[:sort] == 'yeses_count' ? 'checked' : '' %>>
-            <label class="btn btn-outline-primary" for="sort_yes"><i class="fa-solid fa-handshake" style="color: #63E6BE;"></i> Yes数</label>
+            <label class="btn btn-outline-primary" for="sort_yes">
+              <i class="fa-solid fa-handshake" style="color: #63E6BE;"></i>
+              <span class="sort-text">Yes数</span>
+            </label>
           </div>
-          <div class="btn-group" role="group" aria-label="Sort direction">
+          <div class="btn-group sort-direction" role="group" aria-label="Sort direction">
             <input type="radio" class="btn-check" name="direction" id="direction_desc" value="desc" autocomplete="off" <%= params[:direction] == 'desc' || params[:direction].nil? ? 'checked' : '' %>>
-            <label class="btn btn-outline-primary" for="direction_desc"><i class="fa-solid fa-arrow-down-wide-short"></i></label>
+            <label class="btn btn-outline-primary" for="direction_desc">
+              <i class="fa-solid fa-arrow-down-wide-short"></i>
+            </label>
             <input type="radio" class="btn-check" name="direction" id="direction_asc" value="asc" autocomplete="off" <%= params[:direction] == 'asc' ? 'checked' : '' %>>
-            <label class="btn btn-outline-primary" for="direction_asc"><i class="fa-solid fa-arrow-up-wide-short"></i></label>
+            <label class="btn btn-outline-primary" for="direction_asc">
+              <i class="fa-solid fa-arrow-up-wide-short"></i>
+            </label>
           </div>
           <%= submit_tag 'ソート開始', class: 'btn btn-primary' %>
         </div>

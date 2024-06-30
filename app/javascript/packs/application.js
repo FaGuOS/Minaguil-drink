@@ -44,11 +44,13 @@ function initializeTagFunctionality() {
   const addTagButton = document.getElementById('add-tag-button');
   const tagsContainer = document.getElementById('tags-container');
   const tagListHiddenInput = document.getElementById('tag-list-hidden');
-  let tags = [];
+  let tags = tagListHiddenInput.value ? tagListHiddenInput.value.split(',') : [];
 
   if (!tagInput || !addTagButton || !tagsContainer || !tagListHiddenInput) {
     return;
   }
+
+  displayTags();
 
   addTagButton.addEventListener('click', function() {
     const tagValue = tagInput.value.trim();

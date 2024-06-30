@@ -4,29 +4,37 @@
   <% end %>
 
   <div class="row">
+    <% hidden_post_ids = user_signed_in? ? current_user.hidden_posts.pluck(:post_id) : [] %>
+    
     <!-- 左側：最近の投稿 -->
     <div class="col-md-4">
       <h2>トウコウしたレビュー</h2>
       <% @recent_posts.each do |post| %>
-        <div class="card mb-3 position-relative">
-           <div class="row g-0">
-            <div class="col-md-4">
-              <% if post.image.attached? %>
-                <%= image_tag post.image, class: 'img-thumbnail mb-2', size: "200x200" %>
-              <% else %>
-                <%= image_tag 'Reviewonly.png', class: 'img-thumbnail mb-2', size: "200x200" %>
-              <% end %>
+        <div class="card mb-3 <%= hidden_post_ids.include?(post.id) ? 'gray-card' : '' %> position-relative" style="<%= hidden_post_ids.include?(post.id) ? '' : "background: linear-gradient(to bottom, #{post.tags.exists?(name: '質問') ? '#99ff99, #e6ffe6' : post.score > 0 ? '#ff99cc, #ffcce4' : '#87ceeb, #bcddeb'});" %>">
+          <% if hidden_post_ids.include?(post.id) %>
+            <div class="card-body d-flex justify-content-center align-items-center">
+              <i class="fa-solid fa-moon fa-3x" style="color: #ffe687;"></i>
             </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title"><%= post.title %></h5>
-                <p class="card-text"><%= truncate(post.review, length: 100) %></p>
-                <p class="card-text"><small class="text-muted">投稿日時: <%= post.created_at.strftime("%Y-%m-%d %H:%M:%S") %></small></p>
-                <p class="card-text"><small class="text-muted">Yes数: <%= post.yes %></small></p>
+          <% else %>
+            <div class="row g-0">
+              <div class="col-md-4">
+                <% if post.image.attached? %>
+                  <%= image_tag post.image, class: 'img-thumbnail mb-2', size: "200x200" %>
+                <% else %>
+                  <%= image_tag 'Reviewonly.png', class: 'img-thumbnail mb-2', size: "200x200" %>
+                <% end %>
               </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title"><%= post.title %></h5>
+                  <p class="card-text"><%= truncate(post.review, length: 100) %></p>
+                  <p class="card-text"><small class="text-muted">投稿日時: <%= post.created_at.strftime("%Y-%m-%d %H:%M:%S") %></small></p>
+                  <p class="card-text"><small class="text-muted">Yes数: <%= post.yes %></small></p>
+                </div>
+              </div>
+              <a href="<%= post_path(post) %>" class="stretched-link"></a>
             </div>
-            <a href="<%= post_path(post) %>" class="stretched-link"></a>
-          </div>
+          <% end %>
         </div>
       <% end %>
     </div>
@@ -35,25 +43,31 @@
     <div class="col-md-4">
       <h2>気に入ったレビュー</h2>
       <% @yes_posts.each do |post| %>
-        <div class="card mb-3 position-relative">
-           <div class="row g-0">
-            <div class="col-md-4">
-              <% if post.image.attached? %>
-                <%= image_tag post.image, class: 'img-thumbnail mb-2', size: "200x200" %>
-              <% else %>
-                <%= image_tag 'Reviewonly.png', class: 'img-thumbnail mb-2', size: "200x200" %>
-              <% end %>
+        <div class="card mb-3 <%= hidden_post_ids.include?(post.id) ? 'gray-card' : '' %> position-relative" style="<%= hidden_post_ids.include?(post.id) ? '' : "background: linear-gradient(to bottom, #{post.tags.exists?(name: '質問') ? '#99ff99, #e6ffe6' : post.score > 0 ? '#ff99cc, #ffcce4' : '#87ceeb, #bcddeb'});" %>">
+          <% if hidden_post_ids.include?(post.id) %>
+            <div class="card-body d-flex justify-content-center align-items-center">
+              <i class="fa-solid fa-moon fa-3x" style="color: #ffe687;"></i>
             </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title"><%= post.title %></h5>
-                <p class="card-text"><%= truncate(post.review, length: 100) %></p>
-                <p class="card-text"><small class="text-muted">投稿日時: <%= post.created_at.strftime("%Y-%m-%d %H:%M:%S") %></small></p>
-                <p class="card-text"><small class="text-muted">Yes数: <%= post.yes %></small></p>
+          <% else %>
+            <div class="row g-0">
+              <div class="col-md-4">
+                <% if post.image.attached? %>
+                  <%= image_tag post.image, class: 'img-thumbnail mb-2', size: "200x200" %>
+                <% else %>
+                  <%= image_tag 'Reviewonly.png', class: 'img-thumbnail mb-2', size: "200x200" %>
+                <% end %>
               </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title"><%= post.title %></h5>
+                  <p class="card-text"><%= truncate(post.review, length: 100) %></p>
+                  <p class="card-text"><small class="text-muted">投稿日時: <%= post.created_at.strftime("%Y-%m-%d %H:%M:%S") %></small></p>
+                  <p class="card-text"><small class="text-muted">Yes数: <%= post.yes %></small></p>
+                </div>
+              </div>
+              <a href="<%= post_path(post) %>" class="stretched-link"></a>
             </div>
-            <a href="<%= post_path(post) %>" class="stretched-link"></a>
-          </div>
+          <% end %>
         </div>
       <% end %>
     </div>

@@ -229,6 +229,37 @@ body.admin-mode {
   }
 }
 
+@media (max-width: 768px) {
+  .main-content {
+    padding: 20px;
+  }
+  .navbar-brand img {
+    width: 150px;
+  }
+  .page-title {
+    top: 100px;
+    left: 20px;
+    font-size: 2rem;
+  }
+  .sort-text {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content {
+    padding: 30px;
+  }
+  .navbar-brand img {
+    width: 200px;
+  }
+  .page-title {
+    top: 110px;
+    left: 40px;
+    font-size: 2.2rem;
+  }
+}
+
 .img-thumbnail {
   width: 100%;  /* コンテナの幅に合わせる */
   height: auto;
@@ -319,4 +350,49 @@ ext-right {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.hidden-post-background {
+  background: linear-gradient(to bottom right, #001e50, #2350aa);
+  min-height: 100vh;
+  color: white;
+}
+
+.hidden-post-title {
+  color: gray;
+}
+
+.hidden-post-icon {
+  font-size: 8rem;
+  color: #FFD43B;
+}
+
+.hidden-post-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.fixed-size {
+  width: 100%;
+  height: 240px; /* 任意の高さに固定 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.random-pick-fixed-size {
+  
+  width: 100%;
+  height: 400px; /* Random pick!! 用の高さに固定 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.random-pick-card {
+  height: 400px; /* Random pick!! 用の高さに固定 */
+  margin: 10px;
 }

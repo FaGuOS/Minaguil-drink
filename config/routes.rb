@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   # PostsController
   resources :posts do
     member do
+      get :hidden_warning
       put :hide
+      post :unhide
       post :increment_yes
       post :nonsence
       post :add_tag

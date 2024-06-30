@@ -4,12 +4,12 @@ class PostsController < ApplicationController
   before_action :correct_user, only: [:edit, :update, :destroy]
   before_action :admin_user, only: [:hide_selected]
 
-  # GET /posts/rankings
+  # 実装できませんでした…本来であれば投稿のYes数を以て10個下り順に並べる予定のアクション
   def rankings
     @posts = Post.order(yes: :desc).limit(10)
   end
 
-  # GET /posts
+  # indexアクション
   def index
     @posts = Post.left_joins(:yeses)
                  .select('posts.*, COUNT(yeses.id) AS yeses_count')
@@ -19,19 +19,35 @@ class PostsController < ApplicationController
                  .per(9)
   end
 
-  # GET /posts/:id
+  # Showアクション 追加でコメント情報を参照し、コメントの数に応じて表示を変更するアクション
   def show
-    @comments = @post.comments.order(created_at: :desc)
-    @comment = @post.comments.build
-    increment_view_count unless @post.user == current_user
+    if current_user.hidden_posts.exists?(post: @post)
+      @hidden = true
+    else
+      @hidden = false
+      @comments = @post.comments.order(created_at: :desc)
+      @comment = @post.comments.build
+      increment_view_count unless @post.user == current_user
+    end
+  end
+  
+  # Unhideアクション hiddenを行った後、もう一度見たい場合を想定した物
+  def unhide
+    hidden_post = current_user.hidden_posts.find_by(post: @post)
+    if hidden_post
+      hidden_post.destroy
+      redirect_to @post, notice: 'Post is now visible.'
+    else
+      redirect_to posts_path, alert: 'Failed to unhide post.'
+    end
   end
 
-  # GET /posts/new
+  # newアクション
   def new
     @post = Post.new
   end
 
-  # POST /posts
+  # createアクション 作られた際、APIにより本文のポジティブ/ネガティブを分析しスコアを算出するアクション
   def create
     @post = Post.new(post_params)
     begin
@@ -42,6 +58,7 @@ class PostsController < ApplicationController
     end
     @post.user = current_user
 
+    # 画像が添付されていなかった場合に、PreviewOnlyの画像へ自動的に差し替えを行うアクション
     if @post.save
       unless @post.image.attached?
         @post.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'Reviewonly.png')), filename: 'Reviewonly.png', content_type: 'image/png')
@@ -134,6 +151,11 @@ class PostsController < ApplicationController
     Post.where(id: params[:post_ids]).update_all(hidden: true)
     redirect_to posts_path, notice: 'Selected posts have been hidden.'
   end
+  
+  # URLなどで既に非表示となっている投稿へ遷移しようとした際、警告画面へ遷移を行うアクション
+  def hidden_warning
+    # This action renders the hidden warning view
+  end
 
   # タグ処理の実装
   def add_tag
@@ -159,6 +181,9 @@ class PostsController < ApplicationController
   def set_post
     @post = Post.find_by(id: params[:id])
     redirect_to posts_path, notice: 'Post not found' if @post.nil?
+    if @post.hidden?
+      redirect_to hidden_warning_post_path(@post)
+    end
   end
 
   def post_params

@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  before_action :authenticate_user!  # ユーザー認証を追加
   before_action :set_post, only: [:index, :new, :create, :destroy]
   before_action :set_comment, only: [:destroy]
 
@@ -42,4 +43,3 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:comment_1, :comment_2)
   end
 end
-

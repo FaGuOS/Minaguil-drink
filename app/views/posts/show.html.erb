@@ -1,7 +1,14 @@
-<div class="container-fluid mt-4 hidden-post-background">
-  <% content_for :page_title do %>
-    <span class="hidden-post-title">Review title: ( -ω-) 。〇</span>
+<div class="container-fluid mt-4 <%= 'hidden-post-background' if @hidden %>">
+  <% if @hidden %>
+    <% content_for :page_title do %>
+      <span class="hidden-post-title">Review title: ( -ω-) 。〇</span>
+    <% end %>
+  <% else %>
+    <% content_for :page_title do %>
+      <span class="visible-post-title">Review title:<%= @post.title %></span>
+    <% end %>
   <% end %>
+  
   <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
     <% if @hidden %>
       <div class="col-md-8 text-center">

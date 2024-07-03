@@ -3,6 +3,7 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy, :hide, :nonsence, :add_tag, :remove_tag]
   before_action :correct_user, only: [:edit, :update, :destroy]
   before_action :admin_user, only: [:hide_selected]
+  before_action :check_hidden_post, only: [:show]
 
   # 実装できませんでした…本来であれば投稿のYes数を以て10個下り順に並べる予定のアクション
   def rankings
@@ -21,25 +22,9 @@ class PostsController < ApplicationController
 
   # Showアクション 追加でコメント情報を参照し、コメントの数に応じて表示を変更するアクション
   def show
-    if current_user.hidden_posts.exists?(post: @post)
-      @hidden = true
-    else
-      @hidden = false
-      @comments = @post.comments.order(created_at: :desc)
-      @comment = @post.comments.build
-      increment_view_count unless @post.user == current_user
-    end
-  end
-  
-  # Unhideアクション hiddenを行った後、もう一度見たい場合を想定した物
-  def unhide
-    hidden_post = current_user.hidden_posts.find_by(post: @post)
-    if hidden_post
-      hidden_post.destroy
-      redirect_to @post, notice: 'Post is now visible.'
-    else
-      redirect_to posts_path, alert: 'Failed to unhide post.'
-    end
+    @comments = @post.comments.order(created_at: :desc)
+    @comment = @post.comments.build
+    increment_view_count unless @post.user == current_user
   end
 
   # newアクション
@@ -181,7 +166,10 @@ class PostsController < ApplicationController
   def set_post
     @post = Post.find_by(id: params[:id])
     redirect_to posts_path, notice: 'Post not found' if @post.nil?
-    if @post.hidden?
+  end
+
+  def check_hidden_post
+    if user_signed_in? && current_user.hidden_posts.exists?(post: @post)
       redirect_to hidden_warning_post_path(@post)
     end
   end

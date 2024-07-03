@@ -127,3 +127,4 @@ function initializeQuestionTagButton() {
     addTagButton.click();
   });
 }
+

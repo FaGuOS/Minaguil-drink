@@ -128,3 +128,23 @@ function initializeQuestionTagButton() {
   });
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+  const circleButton = document.querySelector(".circle-button");
+  const triangleButton = document.querySelector(".triangle-button");
+
+  circleButton.addEventListener("mouseover", function() {
+    circleButton.style.backgroundColor = "blue";
+  });
+
+  circleButton.addEventListener("mouseout", function() {
+    circleButton.style.backgroundColor = "grey";
+  });
+
+  triangleButton.addEventListener("mouseover", function() {
+    triangleButton.style.borderTopColor = "blue";
+  });
+
+  triangleButton.addEventListener("mouseout", function() {
+    triangleButton.style.borderTopColor = "grey";
+  });
+});

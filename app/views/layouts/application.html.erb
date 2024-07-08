@@ -14,7 +14,9 @@
   <h1 class="page-title"><%= yield(:page_title) %></h1>
   <div class="site-wrapper">
     <header>
-      <%= render 'layouts/header' %>
+      <% unless controller_name == 'homes' && action_name == 'top' %>
+        <%= render 'layouts/header' %>
+      <% end %>
     </header>
     <% flash.each do |key, value| %>
       <div class="alert alert-<%= key == 'notice' ? 'success' : 'danger' %> text-right">
